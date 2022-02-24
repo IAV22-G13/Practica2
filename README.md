@@ -17,9 +17,16 @@ Contenidos requeridos para la práctica:
 
 -Comportamiento de merodeo por casillas para el Minotauro.
 -Algoritmo de recorrido mínimo para el jugador, tanto para moverse hacia la baldosa
-de salida, como para moverse hacie la casilla pulsada por el jugador.
--Algoritmo de suavizado de caminos, que se activa o desactiva.
+de salida, como para moverse hacia la casilla pulsada por el jugador.
+-Algoritmo de suavizado de caminos, que se activa o desactiva a preferencia del
+usuario.
 -Representación del hilo de Ariadna y brillo de la casilla por la que pasa.
+
+Restricciones
+
+-No utilizar plugins de terceros.
+-Documentar los algoritmos y heurísticas.
+-Diseñar y programar de forma limpia.
 
 Extras:
 
