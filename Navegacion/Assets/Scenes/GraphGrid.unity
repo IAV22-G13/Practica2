@@ -300,7 +300,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graph: {fileID: 1574568752}
   algorithm: 0
-  smoothPath: 0
+  smoothPath: 1
   vertexTag: Vertex
   obstacleTag: Wall
   pathColor: {r: 0.98039216, g: 0.9033479, b: 0.015686247, a: 1}
@@ -597,7 +597,7 @@ MonoBehaviour:
   obstaclePrefab: {fileID: 100000, guid: 403c7d1fcaa50ea4e8acd406751a88fd, type: 3}
   mapsDir: Maps
   mapName: arena.map
-  get8Vicinity: 0
+  get8Vicinity: 1
   cellSize: 1
   defaultCost: 1
   maximumCost: Infinity

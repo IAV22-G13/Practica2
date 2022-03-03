@@ -65,7 +65,6 @@ namespace UCM.IAV.Navegacion
             // Con la barra espaciadora se activa la búsqueda del camino mínimo
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                
                 // Si hay ya camino calculado, la muestro en color blanco, y borro la variable con el camino
                 if (path.Count != 0)
                 {

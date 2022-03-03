@@ -141,7 +141,7 @@ namespace UCM.IAV.Navegacion
         public List<Vertex> GetPathAstar(GameObject srcO, GameObject dstO, Heuristic h = null)
         {
             // AQUÍ HAY QUE PONER LA IMPLEMENTACIÓN DEL ALGORITMO A*
-            // ...
+            //Vertex startvertex = 
 
             return new List<Vertex>();
         }
@@ -149,9 +149,32 @@ namespace UCM.IAV.Navegacion
         public List<Vertex> Smooth(List<Vertex> path)
         {
             // AQUÍ HAY QUE PONER LA IMPLEMENTACIÓN DEL ALGORITMO DE SUAVIZADO
-            // ...
+            if (path.Count <= 2)
+                return path;
 
-            return null; //newPath
+            List<Vertex> outputpath = new List<Vertex>();
+            outputpath.Add(path[0]);
+
+            int index = 2;
+
+            while(index < path.Count - 1)
+            {
+                Vector3 fromPt = outputpath[outputpath.Count-1].transform.position;
+                Vector3 toPt = path[index].transform.position;
+                fromPt.y = 0.5f;
+                toPt.y = 0.5f;
+
+                Debug.DrawRay(fromPt, toPt - fromPt, Color.red, 1000000);
+                if (!Physics.Raycast(fromPt, toPt - fromPt))
+                {
+                    outputpath.Add(path[index - 1]);
+                }
+
+                index++;
+            }
+
+            outputpath.Add(path[path.Count - 1]);
+            return outputpath; //newPath
         }
 
         // Reconstruir el camino, dando la vuelta a la lista de nodos 'padres' /previos que hemos ido anotando

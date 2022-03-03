@@ -113,7 +113,7 @@ namespace UCM.IAV.Navegacion
                     {
                         for (j = 0; j < numCols; j++)
                         {
-                            SetNeighbours(j, i);
+                            SetNeighbours(j, i, get8Vicinity);
                         }
                     }
                 }
