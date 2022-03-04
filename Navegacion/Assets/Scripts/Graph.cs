@@ -23,6 +23,14 @@ namespace UCM.IAV.Navegacion
     /// <summary>
     /// Abstract class for graphs
     /// </summary>
+    
+    struct NodeRecord
+    {
+        public Vertex vertex;
+        public float costSoFar;
+        public float estimatedTotalCost;
+    }
+
     public abstract class Graph : MonoBehaviour
     {
 
@@ -138,11 +146,17 @@ namespace UCM.IAV.Navegacion
             return new List<Vertex>();
         }
 
-        public List<Vertex> GetPathAstar(GameObject srcO, GameObject dstO, Heuristic h = null)
+        public List<Vertex> GetPathAstar(Vertex srcO, Vertex dstO, Heuristic h = null)
         {
             // AQUÍ HAY QUE PONER LA IMPLEMENTACIÓN DEL ALGORITMO A*
-            //Vertex startvertex = 
+            NodeRecord startRecord;
+            startRecord.vertex = srcO;
+            startRecord.costSoFar = startRecord.estimatedTotalCost = h;
 
+            List<Vertex> open = new List<Vertex>();
+            open.Add(startRecord.vertex);
+            List<Vertex> closed = new List<Vertex>();
+            
             return new List<Vertex>();
         }
 
@@ -163,9 +177,8 @@ namespace UCM.IAV.Navegacion
                 Vector3 toPt = path[index].transform.position;
                 fromPt.y = 0.5f;
                 toPt.y = 0.5f;
-
-                Debug.DrawRay(fromPt, toPt - fromPt, Color.red, 1000000);
-                if (!Physics.Raycast(fromPt, toPt - fromPt))
+               
+                if (Physics.Raycast(fromPt, toPt - fromPt, out RaycastHit hit, (toPt - fromPt).magnitude/*, layer*/))
                 {
                     outputpath.Add(path[index - 1]);
                 }
