@@ -140,12 +140,14 @@ namespace UCM.IAV.Navegacion
             Vector2[] pos = new Vector2[0];             //??????????
             if (get8)
             {
-                pos = new Vector2[9];
+                pos = new Vector2[8];
                 int c = 0;
                 for (i = row - 1; i <= row + 1; i++)
                 {
                     for (j = col - 1; j <= col + 1; j++)    //Añadida 3ª columna
                     {
+                        if (i == row && j == col)
+                            continue;
                         pos[c] = new Vector2(j, i);
                         c++;
                     }
@@ -173,7 +175,9 @@ namespace UCM.IAV.Navegacion
                     continue;
                 int id = GridToId(j, i);
                 neighbors[vertexId].Add(vertices[id]);
-                costs[vertexId].Add(defaultCost);
+                Vector2 act = IdToGrid(vertexId);
+                Vector2 neig = IdToGrid(id);
+                costs[vertexId].Add((neig-act).magnitude*defaultCost);
             }
         }
 

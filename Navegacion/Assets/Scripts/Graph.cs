@@ -23,12 +23,28 @@ namespace UCM.IAV.Navegacion
     /// <summary>
     /// Abstract class for graphs
     /// </summary>
-    
+
     struct NodeRecord
     {
         public Vertex vertex;
+        public Vertex connection;
         public float costSoFar;
         public float estimatedTotalCost;
+
+        public NodeRecord(Vertex vertex, Vertex conec, float costSoFar, float estimatedTotalCost)
+        {
+            this.vertex = vertex;
+            this.connection = conec;
+            this.costSoFar = costSoFar;
+            this.estimatedTotalCost = estimatedTotalCost;
+        }
+
+        public static bool operator ==(NodeRecord a, NodeRecord b)
+        {
+            if (a.vertex == b.vertex) return true;
+            else return false;
+        }
+        public static bool operator !=(NodeRecord a, NodeRecord b) => !(a == b);
     }
 
     public abstract class Graph : MonoBehaviour
@@ -146,18 +162,84 @@ namespace UCM.IAV.Navegacion
             return new List<Vertex>();
         }
 
-        public List<Vertex> GetPathAstar(Vertex srcO, Vertex dstO, Heuristic h = null)
+        public List<Vertex> GetPathAstar(GameObject srcO, GameObject dstO, Heuristic h = null)
         {
+            Vertex srcOV = srcO.GetComponent<Vertex>();
+            Vertex dstOV = dstO.GetComponent<Vertex>();
             // AQUÍ HAY QUE PONER LA IMPLEMENTACIÓN DEL ALGORITMO A*
-            NodeRecord startRecord;
-            startRecord.vertex = srcO;
-            startRecord.costSoFar = startRecord.estimatedTotalCost = h;
+            NodeRecord startRecord = new NodeRecord();
+            startRecord.vertex = srcOV;
+            //startRecord.costSoFar = startRecord.estimatedTotalCost = h.estimated(srcOV);
 
-            List<Vertex> open = new List<Vertex>();
-            open.Add(startRecord.vertex);
-            List<Vertex> closed = new List<Vertex>();
-            
-            return new List<Vertex>();
+            List<NodeRecord> open = new List<NodeRecord>();     //Lista ordenada por estimatedfTotalCost
+            open.Add(startRecord);
+            List<NodeRecord> closed = new List<NodeRecord>();
+
+            NodeRecord current = open[0];
+            while (open.Count > current.estimatedTotalCost)
+            {
+                if (current.vertex == dstO) break;
+
+                Vertex[] connections = GetNeighbours(current.vertex);
+                for (int i = 0; i < connections.Length; i++)
+                {
+                    NodeRecord endNode = new NodeRecord();
+                    endNode.vertex = connections[i];
+                    float endNodeCost = current.costSoFar + costs[current.vertex.id][i];
+                    float endNodeHeuristic = 0;
+                    NodeRecord endNodeRecord;
+                    if (closed.Contains(endNode))
+                    {
+                        endNodeRecord = closed[closed.IndexOf(endNode)];
+
+                        if (endNodeRecord.costSoFar <= endNodeCost)
+                            continue;
+
+                        closed.Remove(endNodeRecord);
+
+                        endNodeHeuristic = endNodeRecord.estimatedTotalCost - endNodeRecord.costSoFar;
+                    }
+                    else if (open.Contains(endNode))
+                    {
+                        endNodeRecord = open[open.IndexOf(endNode)];
+
+                        if (endNodeRecord.costSoFar <= endNodeCost)
+                            continue;
+
+                        endNodeHeuristic = endNodeRecord.estimatedTotalCost - endNodeRecord.costSoFar;
+                    }
+                    else
+                    {
+                        endNodeRecord = new NodeRecord();
+                        endNodeRecord.vertex = endNode.vertex;
+
+                        //endNodeHeuristic = h.edstimated(endNode.vertex);
+                    }
+
+                    endNodeRecord.costSoFar = endNodeCost;
+                    endNodeRecord.connection = connections[i];
+                    endNodeRecord.estimatedTotalCost = endNodeCost + endNodeHeuristic;
+
+                    if (!open.Contains(endNodeRecord))
+                        open.Add(endNodeRecord);
+                }
+
+                open.Remove(current);
+                closed.Add(current);
+            }
+            if (current.vertex != dstOV)
+                return new List<Vertex>();
+            else
+            {
+                List<Vertex> sol = new List<Vertex>();
+                while (current.vertex != srcOV)
+                {
+                    sol.Insert(0, current.vertex);
+                    //current = closed[closed.IndexOf(current.connection)];
+                }
+
+                return sol;
+            }
         }
 
         public List<Vertex> Smooth(List<Vertex> path)
@@ -171,13 +253,13 @@ namespace UCM.IAV.Navegacion
 
             int index = 2;
 
-            while(index < path.Count - 1)
+            while (index < path.Count - 1)
             {
-                Vector3 fromPt = outputpath[outputpath.Count-1].transform.position;
+                Vector3 fromPt = outputpath[outputpath.Count - 1].transform.position;
                 Vector3 toPt = path[index].transform.position;
                 fromPt.y = 0.5f;
                 toPt.y = 0.5f;
-               
+
                 if (Physics.Raycast(fromPt, toPt - fromPt, out RaycastHit hit, (toPt - fromPt).magnitude/*, layer*/))
                 {
                     outputpath.Add(path[index - 1]);
