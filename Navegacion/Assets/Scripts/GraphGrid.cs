@@ -13,6 +13,14 @@
         Esta asignatura se imparte en la Facultad de Informática de la Universidad Complutense de Madrid (España).
         Contacto: email@federicopeinado.com
 */
+
+    public class location
+    {
+        public int x;
+        public int y;
+        public location(int x_, int y_) { x = x_; y = y_; }
+    }
+
 namespace UCM.IAV.Navegacion
 {
 
@@ -20,6 +28,7 @@ namespace UCM.IAV.Navegacion
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using Random = UnityEngine.Random;
 
     public class GraphGrid : Graph
     {
@@ -32,6 +41,8 @@ namespace UCM.IAV.Navegacion
         public float defaultCost = 1f;
         [Range(0, Mathf.Infinity)]
         public float maximumCost = Mathf.Infinity;
+
+        public location[] mazeNeigh = new location[] {new location(0, 1), new location(0, -1), new location(1, 0), new location(-1, 0)};
 
         int numCols;
         int numRows;
@@ -49,6 +60,149 @@ namespace UCM.IAV.Navegacion
             location.y = Mathf.Floor(id / numCols);
             location.x = Mathf.Floor(id % numCols);
             return location;
+        }
+
+        private void LoadRandMap() {
+            int j = 0;
+            int i = 0;
+            int id = 0;
+
+            Vector3 position = Vector3.zero;
+            Vector3 scale = Vector3.zero;
+            numRows = 49;
+            numCols = 49;
+
+            vertices = new List<Vertex>(numRows * numCols);
+            neighbors = new List<List<Vertex>>(numRows * numCols);
+            costs = new List<List<float>>(numRows * numCols);
+            vertexObjs = new GameObject[numRows * numCols];
+            mapVertices = new bool[numRows, numCols];
+
+            for (i = 0; i < numRows; i++)
+            {
+                for (j = 0; j < numCols; j++)
+                {
+                    mapVertices[i, j] = false; 
+                }
+            }
+
+            Random.seed = System.DateTime.Now.Second;
+
+            //AQUI
+            int p = Random.Range(0, 4);
+            int o = Random.Range(1, numRows-1);
+            if (o % 2 == 0)
+                o += 1;
+
+            switch(p){
+                case 0:
+                    mapVertices[o, 0] = true;
+                    randMap(new location(o, 1));
+                    break;
+                case 1:
+                    mapVertices[0, o] = true;
+                    randMap(new location(1, o));
+                    break;
+                case 2:
+                    mapVertices[o, 48] = true;
+                    randMap(new location(o, 47));
+                    break;
+                case 3:
+                    mapVertices[48, o] = true;
+                    randMap(new location(47, o));
+                    break;
+            }
+
+            for (i = 0; i < numRows; i++)
+            {
+                for (j = 0; j < numCols; j++)
+                {
+                    position.x = j * cellSize;
+                    position.z = i * cellSize;
+                    id = GridToId(j, i);
+                    if (mapVertices[i, j])
+                        vertexObjs[id] = Instantiate(vertexPrefab, position, Quaternion.identity) as GameObject;
+                    else
+                        vertexObjs[id] = Instantiate(obstaclePrefab, position, Quaternion.identity) as GameObject;
+                    vertexObjs[id].name = vertexObjs[id].name.Replace("(Clone)", id.ToString());
+                    Vertex v = vertexObjs[id].AddComponent<Vertex>();
+                    v.id = id;
+                    vertices.Add(v);
+                    neighbors.Add(new List<Vertex>());
+                    costs.Add(new List<float>());
+                    float y = vertexObjs[id].transform.localScale.y;
+                    scale = new Vector3(cellSize, y, cellSize);
+                    vertexObjs[id].transform.localScale = scale;
+                    vertexObjs[id].transform.parent = gameObject.transform;
+                }
+            }
+
+            // now onto the neighbours
+            for (i = 0; i < numRows; i++)
+            {
+                for (j = 0; j < numCols; j++)
+                {
+                    SetNeighbours(j, i, get8Vicinity);
+                }
+            }
+        }
+
+
+        void randMap(location ini)
+        {
+            mapVertices[ini.x, ini.y] = true;
+
+            Stack<location> lAux = new Stack<location>();
+            lAux.Push(ini);
+
+            while (lAux.Count > 0)
+            {
+                location curr = lAux.Peek();
+
+                location next = makeConnection(curr);
+                if(next != null)
+                {
+                    lAux.Push(next);
+                }
+                else
+                {
+                    lAux.Pop();
+                }
+            }
+        }
+
+        location makeConnection(location l)
+        {
+            location[] neigh = shuffle();
+
+            int x = l.x;
+            int y = l.y;
+
+            for (int i = 0; i < 4; i++)
+            {
+                int nx = x + (neigh[i].x * 2);
+                int ny = y + (neigh[i].y * 2);
+                if (nx >= 0 && nx < numRows && ny >= 0 && ny < numCols && !mapVertices[nx, ny])
+                {
+                    mapVertices[nx, ny] = true;
+                    mapVertices[x + neigh[i].x, y + neigh[i].y] = true;
+                    return (new location(nx, ny));
+                }
+            }
+            
+
+            return null;
+        }
+
+         location[] shuffle()
+        {
+            location[] aux = new location[4];
+            int r = Random.Range(0, 4);
+            for (int i = 0; i < 4; i++)
+            {
+                aux[i] = mazeNeigh[(r + i) % 4];
+            }
+            return aux;
         }
 
         private void LoadMap(string filename)
@@ -126,7 +280,8 @@ namespace UCM.IAV.Navegacion
 
         public override void Load()
         {
-            LoadMap(mapName);
+            //LoadMap(mapName);
+            LoadRandMap();
         }
 
         protected void SetNeighbours(int x, int y, bool get8 = true)
