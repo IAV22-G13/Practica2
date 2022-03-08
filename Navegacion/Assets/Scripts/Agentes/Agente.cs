@@ -125,8 +125,8 @@ namespace UCM.IAV.Navegacion
             }
 
             // La opción por defecto sería usar ForceMode.Force, pero eso implicaría que el comportamiento de dirección tuviese en cuenta la masa a la hora de calcular la aceleración que se pide
-            cuerpoRigido.AddForce(direccion.lineal, ForceMode.Acceleration);
-            //cuerpoRigido.velocity = direccion.lineal;
+            //cuerpoRigido.AddForce(direccion.lineal, ForceMode.Force);
+            cuerpoRigido.velocity = direccion.lineal;
 
             // Limitamos la aceleración angular al máximo que acepta este agente (aunque normalmente vendrá ya limitada)
             if (direccion.angular > aceleracionAngularMax)
@@ -134,7 +134,8 @@ namespace UCM.IAV.Navegacion
 
             // Rotamos el objeto siempre sobre su eje Y (hacia arriba), asumiendo que el agente está sobre un plano y quiere mirar a un lado o a otro
             // La opción por defecto sería usar ForceMode.Force, pero eso implicaría que el comportamiento de dirección tuviese en cuenta la masa a la hora de calcular la aceleración que se pide
-            cuerpoRigido.AddTorque(transform.up * direccion.angular, ForceMode.Acceleration);
+            //cuerpoRigido.AddTorque(transform.up * direccion.angular, ForceMode.Acceleration);
+            cuerpoRigido.angularVelocity = transform.up * direccion.angular;
 
             /* El tema de la orientación, descomentarlo si queremos sobreescribir toda la cuestión de la velocidad angular
             orientacion += rotacion / Time.deltaTime; // En lugar de * he puesto / para así calcular la aceleración, que es lo que debe ir aquí
@@ -152,7 +153,6 @@ namespace UCM.IAV.Navegacion
             // Limito la velocidad lineal al terminar 
             if (cuerpoRigido.velocity.magnitude > velocidadMax)
             {
-                Debug.Log("Nope");
                 cuerpoRigido.velocity = cuerpoRigido.velocity.normalized * velocidadMax;
             }
 

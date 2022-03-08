@@ -31,9 +31,8 @@ namespace UCM.IAV.Navegacion
             direccion.lineal *= agente.aceleracionMax;
 
             //this.transform.rotation = new Quaternion(0, Mathf.Atan2(-agente.velocidad.x, agente.velocidad.z), 0, 0);
-            if ((direccion.lineal.magnitude > deathZone || direccion.lineal.magnitude < -deathZone))
-                agente.transform.rotation = Quaternion.LookRotation(direccion.lineal, Vector3.up);
-            else direccion.angular = 0.0f;
+            if (direccion.lineal.magnitude > deathZone || direccion.lineal.magnitude < -deathZone)
+                agente.transform.rotation = Quaternion.LookRotation(agente.velocidad, Vector3.up);
 
             return direccion;
         }
