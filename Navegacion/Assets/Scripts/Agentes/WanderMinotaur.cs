@@ -8,33 +8,42 @@ namespace UCM.IAV.Navegacion
     {
         public Graph grafo;
         public float velocity;
-        private int i = 0;
         private List<Vertex> path = null;
 
         public void Start()
         {
-            GameObject dest = grafo.randCass();   
-            path = grafo.GetPathBFS(this.gameObject, dest);
-            i = 0;
         }
 
         public override Direccion GetDireccion()
         {
+            if (path == null)
+            {
+                path = grafo.GetPathBFS(this.gameObject, grafo.randCass());
+                path = grafo.Smooth(path);
+            }
+
             Direccion result = new Direccion();
 
-            GameObject dest = grafo.randCass();
-
-            objetivo = path[i].gameObject;
+            objetivo = path[path.Count - 1].gameObject;
 
             Vector3 direccion = objetivo.transform.position - this.transform.position;
             float distance = direccion.magnitude;
 
-            if (distance < 0.1 && distance > -0.1)
+            if (distance < 0.5 && distance > -0.5)
             {
-                path = grafo.GetPathBFS(this.gameObject, dest);
-                i = 0;
+                Vertex act = path[path.Count - 1];
+                path.RemoveAt(path.Count - 1);
+                if (path.Count == 0)
+                {
+                    path = grafo.GetPathBFS(act.gameObject, grafo.randCass());
+                    path = grafo.Smooth(path);
+                }
+                else
+                {
+                    path = grafo.GetPathBFS(act.gameObject, path[0].gameObject);
+                    path = grafo.Smooth(path);
+                }
             }
-            else i++;
 
             Vector3 targetVelocity = direccion;
             targetVelocity.Normalize();

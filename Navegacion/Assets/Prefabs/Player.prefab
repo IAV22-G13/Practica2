@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 6679815939551551194}
   - component: {fileID: 6679815939551551195}
   - component: {fileID: 6679815939551551172}
+  - component: {fileID: 6097629163773455568}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -166,7 +167,7 @@ MonoBehaviour:
   umbralPrioridad: 0.2
   velocidadMax: 50
   rotacionMax: 2
-  aceleracionMax: 3
+  aceleracionMax: 6
   aceleracionAngularMax: 0
   velocidad: {x: 0, y: 0, z: 0}
   rotacion: 0
@@ -178,7 +179,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6679815939551551173}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31d56f0a80623344e8f8ff01938cc760, type: 3}
   m_Name: 
@@ -187,6 +188,23 @@ MonoBehaviour:
   prioridad: 1
   objetivo: {fileID: 0}
   deathZone: 0.1
+--- !u!114 &6097629163773455568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6679815939551551173}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4380e91712d754f9fd3e3c17393298, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  peso: 1
+  prioridad: 1
+  objetivo: {fileID: 0}
+  grafo: {fileID: 0}
+  velocity: 50
 --- !u!1 &6679815939845372145
 GameObject:
   m_ObjectHideFlags: 0

@@ -597,7 +597,7 @@ MonoBehaviour:
   obstaclePrefab: {fileID: 100000, guid: 403c7d1fcaa50ea4e8acd406751a88fd, type: 3}
   mapsDir: Maps
   mapName: arena.map
-  get8Vicinity: 1
+  get8Vicinity: 0
   cellSize: 1
   defaultCost: 1
   maximumCost: Infinity
@@ -623,11 +623,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6679815939551551172, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+    - target: {fileID: 6097629163773455568, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}
-      propertyPath: deathZone
-      value: 0.1
-      objectReference: {fileID: 0}
+      propertyPath: grafo
+      value: 
+      objectReference: {fileID: 1574568752}
     - target: {fileID: 6679815939551551173, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}
       propertyPath: m_Name
@@ -687,21 +687,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6679815939551551194, guid: a275a66bfa87b3f43885bcf12f7d7c90,
-        type: 3}
-      propertyPath: m_Drag
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6679815939551551195, guid: a275a66bfa87b3f43885bcf12f7d7c90,
-        type: 3}
-      propertyPath: velocidadMax
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 6679815939551551195, guid: a275a66bfa87b3f43885bcf12f7d7c90,
-        type: 3}
-      propertyPath: aceleracionMax
-      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a275a66bfa87b3f43885bcf12f7d7c90, type: 3}
