@@ -33,6 +33,7 @@ namespace UCM.IAV.Navegacion
     public class GraphGrid : Graph
     {
         public GameObject obstaclePrefab;
+        public GameObject playerPrefab;
         public string mapsDir = "Maps"; // Directorio por defecto
         public string mapName = "arena.map"; // Fichero por defecto
         public bool get8Vicinity = false;
@@ -41,6 +42,7 @@ namespace UCM.IAV.Navegacion
         public float defaultCost = 1f;
         [Range(0, Mathf.Infinity)]
         public float maximumCost = Mathf.Infinity;
+        
 
         public location[] mazeNeigh = new location[] {new location(0, 1), new location(0, -1), new location(1, 0), new location(-1, 0)};
 
@@ -51,6 +53,8 @@ namespace UCM.IAV.Navegacion
         int numRows;
         GameObject[] vertexObjs;
         bool[,] mapVertices;
+        location playerIniPos;
+        Quaternion playerIniRot;
 
         private int GridToId(int x, int y)
         {
@@ -101,20 +105,45 @@ namespace UCM.IAV.Navegacion
                 case 0:
                     mapVertices[o, 0] = true;
                     randMap(new location(o, 1));
+                    playerIniRot = Quaternion.Euler(0, 90, 0);
                     break;
                 case 1:
                     mapVertices[0, o] = true;
                     randMap(new location(1, o));
+                    playerIniRot = Quaternion.Euler(0, 0, 0);
                     break;
                 case 2:
                     mapVertices[o, 48] = true;
                     randMap(new location(o, 47));
+                    playerIniRot = Quaternion.Euler(0, 270, 0);
                     break;
                 case 3:
                     mapVertices[48, o] = true;
                     randMap(new location(47, o));
+                    playerIniRot = Quaternion.Euler(0, 180, 0);
                     break;
             }
+
+            o = Random.Range(1, numRows - 1);
+            if (o % 2 == 0)
+                o += 1;
+
+            switch (p)
+            {
+                case 0:
+                    mapVertices[o, 48] = true;
+                    break;
+                case 1:
+                    mapVertices[48, o] = true;
+                    break;
+                case 2:
+                    mapVertices[o, 0] = true;
+                    break;
+                case 3:
+                    mapVertices[0, o] = true;
+                    break;
+            }
+
 
             for (i = 0; i < numRows; i++)
             {
@@ -153,6 +182,7 @@ namespace UCM.IAV.Navegacion
 
         void randMap(location ini)
         {
+            playerIniPos = ini;
             mapVertices[ini.x, ini.y] = true;
 
             Stack<location> lAux = new Stack<location>();
@@ -283,10 +313,12 @@ namespace UCM.IAV.Navegacion
 
         public override void Load()
         {
+            playerIniPos = new location(0, 0);
             if(!randomMap)
                 LoadMap(mapName);
             else 
                 LoadRandMap();
+            Instantiate(playerPrefab, new Vector3(playerIniPos.y * cellSize /*+ (cellSize / 2)*/, 0, playerIniPos.x * cellSize /*+ (cellSize / 2)*/), playerIniRot);
         }
 
         protected void SetNeighbours(int x, int y, bool get8 = true)
