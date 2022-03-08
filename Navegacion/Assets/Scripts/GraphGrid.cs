@@ -55,6 +55,7 @@ namespace UCM.IAV.Navegacion
         bool[,] mapVertices;
         location playerIniPos;
         Quaternion playerIniRot;
+        GameObject endCass;
 
         private int GridToId(int x, int y)
         {
@@ -132,15 +133,19 @@ namespace UCM.IAV.Navegacion
             {
                 case 0:
                     mapVertices[o, 48] = true;
+                    endCass = vertices[GridToId(o, 48)].gameObject;
                     break;
                 case 1:
                     mapVertices[48, o] = true;
+                    endCass = vertices[GridToId(48, o)].gameObject;
                     break;
                 case 2:
                     mapVertices[o, 0] = true;
+                    endCass = vertices[GridToId(o, 0)].gameObject;
                     break;
                 case 3:
                     mapVertices[0, o] = true;
+                    endCass = vertices[GridToId(0, o)].gameObject;
                     break;
             }
 
@@ -179,6 +184,10 @@ namespace UCM.IAV.Navegacion
             }
         }
 
+        public GameObject getEndCass()
+        {
+            return endCass;
+        }
 
         void randMap(location ini)
         {

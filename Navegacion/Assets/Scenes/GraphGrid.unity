@@ -595,6 +595,7 @@ MonoBehaviour:
   vertexPrefab: {fileID: 100000, guid: a0702439d05d5334e885e87aeba2a438, type: 3}
   path: []
   obstaclePrefab: {fileID: 100000, guid: 403c7d1fcaa50ea4e8acd406751a88fd, type: 3}
+  playerPrefab: {fileID: 0}
   mapsDir: Maps
   mapName: arena.map
   get8Vicinity: 0
@@ -628,6 +629,21 @@ PrefabInstance:
       propertyPath: grafo
       value: 
       objectReference: {fileID: 1574568752}
+    - target: {fileID: 6679815939551551172, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: peso
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679815939551551172, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679815939551551172, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: prioridad
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6679815939551551173, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}
       propertyPath: m_Name
@@ -688,8 +704,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6679815939551551195, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: combinarPorPrioridad
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a275a66bfa87b3f43885bcf12f7d7c90, type: 3}
+--- !u!1 &1717499798 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6679815939551551173, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+    type: 3}
+  m_PrefabInstance: {fileID: 1716963862}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1717499799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717499798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 191da1be1442fca458abfa44ec262912, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1783185100
 GameObject:
   m_ObjectHideFlags: 0

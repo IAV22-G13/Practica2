@@ -6,20 +6,33 @@ namespace UCM.IAV.Navegacion
 {
     public class WanderMinotaur : ComportamientoAgente
     {
-        public Graph grafo;
+        public GraphGrid grafo;
         public float velocity;
         private List<Vertex> path = null;
+        private GameObject endOfPath = null;
 
-        public void Start()
+        private void OnEnable()
         {
+            if (path != null)
+            {
+                path = grafo.GetPathBFS(this.gameObject, endOfPath);
+                path = grafo.Smooth(path);
+                ShowPath(path, Color.red);
+            }
         }
 
         public override Direccion GetDireccion()
         {
             if (path == null)
             {
-                path = grafo.GetPathBFS(this.gameObject, grafo.randCass());
+                if (this.gameObject.GetComponent<ControlJugador>() != null && grafo.getEndCass() != null)
+                    endOfPath = grafo.getEndCass();
+                else
+                    endOfPath = grafo.randCass();
+
+                path = grafo.GetPathBFS(this.gameObject, endOfPath);
                 path = grafo.Smooth(path);
+                ShowPath(path, Color.blue);
             }
 
             Direccion result = new Direccion();
@@ -35,13 +48,20 @@ namespace UCM.IAV.Navegacion
                 path.RemoveAt(path.Count - 1);
                 if (path.Count == 0)
                 {
+                    if (this.gameObject.GetComponent<ControlJugador>() != null)  //Final laberinto
+                    {
+                        path = null;                                      
+                        return new Direccion();
+                    }
                     path = grafo.GetPathBFS(act.gameObject, grafo.randCass());
                     path = grafo.Smooth(path);
+                    ShowPath(path, Color.black);
                 }
                 else
                 {
                     path = grafo.GetPathBFS(act.gameObject, path[0].gameObject);
                     path = grafo.Smooth(path);
+                    ShowPath(path, Color.green);
                 }
             }
 
@@ -53,6 +73,19 @@ namespace UCM.IAV.Navegacion
             agente.transform.rotation = Quaternion.LookRotation(result.lineal, Vector3.up);
 
             return result;
+        }
+
+        public void ShowPath(List<Vertex> path, Color color)
+        {
+            int i;
+            for (i = 0; i < path.Count; i++)
+            {
+                Vertex v = path[i];
+                Renderer r = v.GetComponent<Renderer>();
+                if (ReferenceEquals(r, null))
+                    continue;
+                r.material.color = color;
+            }
         }
     }
 }
