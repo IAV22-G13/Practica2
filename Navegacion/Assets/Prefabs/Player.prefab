@@ -164,9 +164,9 @@ MonoBehaviour:
   combinarPorPeso: 0
   combinarPorPrioridad: 0
   umbralPrioridad: 0.2
-  velocidadMax: 10
+  velocidadMax: 50
   rotacionMax: 2
-  aceleracionMax: 1
+  aceleracionMax: 3
   aceleracionAngularMax: 0
   velocidad: {x: 0, y: 0, z: 0}
   rotacion: 0
@@ -186,6 +186,7 @@ MonoBehaviour:
   peso: 1
   prioridad: 1
   objetivo: {fileID: 0}
+  deathZone: 0.1
 --- !u!1 &6679815939845372145
 GameObject:
   m_ObjectHideFlags: 0
