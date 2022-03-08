@@ -4,10 +4,17 @@ using UnityEngine;
 
 namespace UCM.IAV.Navegacion
 {
-    public class WanderMinotaur : ComportamientoAgente
+    public class GoToCass : ComportamientoAgente
     {
-        public GraphGrid grafo;
-        public float velocity;
+        [SerializeField]
+        GraphGrid grafo;
+        [SerializeField]
+        float velocity;
+        [SerializeField]
+        Material material;
+        [SerializeField]
+        Material materialOld;
+
         private List<Vertex> path = null;
         private GameObject endOfPath = null;
 
@@ -17,8 +24,14 @@ namespace UCM.IAV.Navegacion
             {
                 path = grafo.GetPathBFS(this.gameObject, endOfPath);
                 path = grafo.Smooth(path);
-                ShowPath(path, Color.red);
+                DrawPath(material);
+                //ShowPath(path, Color.red);
             }
+        }
+
+        private void OnDisable()
+        {
+            DrawPath(materialOld);
         }
 
         public override Direccion GetDireccion()
@@ -32,7 +45,8 @@ namespace UCM.IAV.Navegacion
 
                 path = grafo.GetPathBFS(this.gameObject, endOfPath);
                 path = grafo.Smooth(path);
-                ShowPath(path, Color.blue);
+                DrawPath(material);
+                //ShowPath(path, Color.blue);
             }
 
             Direccion result = new Direccion();
@@ -45,23 +59,26 @@ namespace UCM.IAV.Navegacion
             if (distance < 0.5 && distance > -0.5)
             {
                 Vertex act = path[path.Count - 1];
+                path[path.Count - 1].GetComponent<MeshRenderer>().material = materialOld;
                 path.RemoveAt(path.Count - 1);
                 if (path.Count == 0)
                 {
                     if (this.gameObject.GetComponent<ControlJugador>() != null)  //Final laberinto
                     {
-                        path = null;                                      
+                        path = null;
                         return new Direccion();
                     }
                     path = grafo.GetPathBFS(act.gameObject, grafo.randCass());
                     path = grafo.Smooth(path);
-                    ShowPath(path, Color.black);
+                    DrawPath(material);
+                    //ShowPath(path, Color.black);
                 }
                 else
                 {
-                    path = grafo.GetPathBFS(act.gameObject, path[0].gameObject);
-                    path = grafo.Smooth(path);
-                    ShowPath(path, Color.green);
+                    //path = grafo.GetPathBFS(act.gameObject, path[0].gameObject);
+                    //path = grafo.Smooth(path);
+                    //DrawPath(material);
+                    //ShowPath(path, Color.green);
                 }
             }
 
@@ -85,6 +102,22 @@ namespace UCM.IAV.Navegacion
                 if (ReferenceEquals(r, null))
                     continue;
                 r.material.color = color;
+            }
+        }
+
+        public void DrawPath(Material m)
+        {
+            for (int i = 0; i < path.Count; i++)
+            {
+                path[i].GetComponent<MeshRenderer>().material = m;
+                Vector3 pos;
+                if (i == 0)
+                    pos = this.gameObject.transform.position;
+                else
+                    pos = path[i].gameObject.transform.position;
+                pos.y = 2;
+                this.GetComponent<LineRenderer>().positionCount = path.Count;
+                this.GetComponent<LineRenderer>().SetPosition(i, pos);
             }
         }
     }

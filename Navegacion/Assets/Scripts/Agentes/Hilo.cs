@@ -10,11 +10,11 @@ namespace UCM.IAV.Navegacion
         {
             if (Input.GetKeyDown("space"))
             {
-                this.gameObject.GetComponent<WanderMinotaur>().enabled = true;
+                this.gameObject.GetComponent<GoToCass>().enabled = true;
             }
             else if (Input.GetKeyUp("space"))
             {
-                this.gameObject.GetComponent<WanderMinotaur>().enabled = false;
+                this.gameObject.GetComponent<GoToCass>().enabled = false;
             }
         }
     }
