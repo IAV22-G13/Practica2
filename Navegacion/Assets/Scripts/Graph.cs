@@ -301,5 +301,11 @@ namespace UCM.IAV.Navegacion
             Vector3 posB = b.transform.position;
             return Mathf.Abs(posA.x - posB.x) + Mathf.Abs(posA.y - posB.y);
         }
+
+        public GameObject randCass()
+        {
+            int cass = Random.Range(0, vertices.Count-1);
+            return vertices[cass].gameObject;
+        }
     }
 }

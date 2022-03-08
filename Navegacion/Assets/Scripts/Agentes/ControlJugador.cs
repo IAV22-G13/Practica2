@@ -6,7 +6,7 @@
    Autor: Federico Peinado 
    Contacto: email@federicopeinado.com
 */
-namespace UCM.IAV.Movimiento
+namespace UCM.IAV.Navegacion
 {
 
     using UnityEngine;
