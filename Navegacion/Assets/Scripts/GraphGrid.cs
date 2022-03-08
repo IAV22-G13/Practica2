@@ -44,6 +44,9 @@ namespace UCM.IAV.Navegacion
 
         public location[] mazeNeigh = new location[] {new location(0, 1), new location(0, -1), new location(1, 0), new location(-1, 0)};
 
+        [SerializeField]
+        bool randomMap = false;
+
         int numCols;
         int numRows;
         GameObject[] vertexObjs;
@@ -280,8 +283,10 @@ namespace UCM.IAV.Navegacion
 
         public override void Load()
         {
-            //LoadMap(mapName);
-            LoadRandMap();
+            if(!randomMap)
+                LoadMap(mapName);
+            else 
+                LoadRandMap();
         }
 
         protected void SetNeighbours(int x, int y, bool get8 = true)

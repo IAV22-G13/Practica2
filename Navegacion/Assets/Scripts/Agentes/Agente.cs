@@ -92,7 +92,7 @@ namespace UCM.IAV.Movimiento
         /// <summary>
         /// Al comienzo, se inicialian algunas variables
         /// </summary>
-        void Start()
+        public void Start()
         {
             // Descomentar estas líneas si queremos ignorar los valores iniciales de velocidad y rotación
             //velocidad = Vector3.zero; 
@@ -120,7 +120,9 @@ namespace UCM.IAV.Movimiento
             }
             // Limitamos la aceleración al máximo que acepta este agente (aunque normalmente vendrá ya limitada)
             if (direccion.lineal.sqrMagnitude > aceleracionMax)
+            {
                 direccion.lineal = direccion.lineal.normalized * aceleracionMax;
+            }
 
             // La opción por defecto sería usar ForceMode.Force, pero eso implicaría que el comportamiento de dirección tuviese en cuenta la masa a la hora de calcular la aceleración que se pide
             cuerpoRigido.AddForce(direccion.lineal, ForceMode.Acceleration);
@@ -149,7 +151,10 @@ namespace UCM.IAV.Movimiento
 
             // Limito la velocidad lineal al terminar 
             if (cuerpoRigido.velocity.magnitude > velocidadMax)
+            {
+                Debug.Log("Nope");
                 cuerpoRigido.velocity = cuerpoRigido.velocity.normalized * velocidadMax;
+            }
 
             // Limito la velocidad angular al terminar
             if (cuerpoRigido.angularVelocity.magnitude > rotacionMax)
@@ -157,8 +162,9 @@ namespace UCM.IAV.Movimiento
             if (cuerpoRigido.angularVelocity.magnitude < -rotacionMax)
                 cuerpoRigido.angularVelocity = cuerpoRigido.angularVelocity.normalized * -rotacionMax;
 
-            velocidad += direccion.lineal * Time.deltaTime;
-            rotacion += direccion.angular * Time.deltaTime;
+            velocidad = direccion.lineal * Time.deltaTime;
+            rotacion = direccion.angular * Time.deltaTime;
+            if (cuerpoRigido.angularVelocity.y < 0.1f) cuerpoRigido.angularVelocity = new Vector3(0, 0, 0);
         }
 
         /// <summary>
