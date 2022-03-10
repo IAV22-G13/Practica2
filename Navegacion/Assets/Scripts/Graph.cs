@@ -49,7 +49,7 @@ namespace UCM.IAV.Navegacion
 
     public abstract class Graph : MonoBehaviour
     {
-
+        public float raySize;
         public GameObject vertexPrefab;
         protected List<Vertex> vertices;
         protected List<List<Vertex>> neighbors;
@@ -258,13 +258,25 @@ namespace UCM.IAV.Navegacion
                 Vector3 fromPt = outputpath[outputpath.Count - 1].transform.position;
                 Vector3 toPt = path[index].transform.position;
                 fromPt.y = 0.5f;
-                toPt.y = 0.5f;
+                toPt.y = 0.5f;               
 
-                if (Physics.Raycast(fromPt, toPt - fromPt, out RaycastHit hit, (toPt - fromPt).magnitude/*, layer*/))
+                Vector3 fromPt1 = new Vector3(fromPt.x - raySize, fromPt.y, fromPt.z - raySize);
+                Vector3 fromPt2 = new Vector3(fromPt.x + raySize, fromPt.y, fromPt.z - raySize);
+                Vector3 fromPt3 = new Vector3(fromPt.x - raySize, fromPt.y, fromPt.z + raySize);
+                Vector3 fromPt4 = new Vector3(fromPt.x + raySize, fromPt.y, fromPt.z + raySize);
+
+                Vector3 toPt1 = new Vector3(toPt.x - raySize, toPt.y, toPt.z - raySize);
+                Vector3 toPt2 = new Vector3(toPt.x + raySize, toPt.y, toPt.z - raySize);
+                Vector3 toPt3 = new Vector3(toPt.x - raySize, toPt.y, toPt.z + raySize);
+                Vector3 toPt4 = new Vector3(toPt.x + raySize, toPt.y, toPt.z + raySize);
+
+                if (Physics.Raycast(fromPt1, toPt1 - fromPt1, out RaycastHit hit, (toPt1 - fromPt1).magnitude) ||
+                    Physics.Raycast(fromPt2, toPt2 - fromPt2, out RaycastHit hit1, (toPt2 - fromPt2).magnitude) ||
+                    Physics.Raycast(fromPt3, toPt3 - fromPt3, out RaycastHit hit2, (toPt3 - fromPt3).magnitude) ||
+                    Physics.Raycast(fromPt4, toPt4 - fromPt4, out RaycastHit hit3, (toPt4 - fromPt4).magnitude))
                 {
                     outputpath.Add(path[index - 1]);
                 }
-
                 index++;
             }
 

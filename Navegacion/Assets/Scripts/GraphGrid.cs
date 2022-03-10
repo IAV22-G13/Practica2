@@ -14,12 +14,12 @@
         Contacto: email@federicopeinado.com
 */
 
-    public class location
-    {
-        public int x;
-        public int y;
-        public location(int x_, int y_) { x = x_; y = y_; }
-    }
+public class location
+{
+    public int x;
+    public int y;
+    public location(int x_, int y_) { x = x_; y = y_; }
+}
 
 namespace UCM.IAV.Navegacion
 {
@@ -42,9 +42,9 @@ namespace UCM.IAV.Navegacion
         public float defaultCost = 1f;
         [Range(0, Mathf.Infinity)]
         public float maximumCost = Mathf.Infinity;
-        
 
-        public location[] mazeNeigh = new location[] {new location(0, 1), new location(0, -1), new location(1, 0), new location(-1, 0)};
+
+        public location[] mazeNeigh = new location[] { new location(0, 1), new location(0, -1), new location(1, 0), new location(-1, 0) };
 
         [SerializeField]
         bool randomMap = false;
@@ -55,7 +55,7 @@ namespace UCM.IAV.Navegacion
         bool[,] mapVertices;
         location playerIniPos;
         Quaternion playerIniRot;
-        GameObject endCass;
+        int endCass;
 
         private int GridToId(int x, int y)
         {
@@ -70,7 +70,8 @@ namespace UCM.IAV.Navegacion
             return location;
         }
 
-        private void LoadRandMap() {
+        private void LoadRandMap()
+        {
             int j = 0;
             int i = 0;
             int id = 0;
@@ -90,19 +91,20 @@ namespace UCM.IAV.Navegacion
             {
                 for (j = 0; j < numCols; j++)
                 {
-                    mapVertices[i, j] = false; 
+                    mapVertices[i, j] = false;
                 }
             }
 
-            Random.seed = System.DateTime.Now.Second;
+            Random.InitState(System.DateTime.Now.Second);
 
             //AQUI
             int p = Random.Range(0, 4);
-            int o = Random.Range(1, numRows-1);
+            int o = Random.Range(1, numRows - 1);
             if (o % 2 == 0)
                 o += 1;
 
-            switch(p){
+            switch (p)
+            {
                 case 0:
                     mapVertices[o, 0] = true;
                     randMap(new location(o, 1));
@@ -128,34 +130,33 @@ namespace UCM.IAV.Navegacion
             o = Random.Range(1, numRows - 1);
             if (o % 2 == 0)
                 o += 1;
-
+            Debug.Log(o);
             switch (p)
             {
                 case 0:
                     mapVertices[o, 48] = true;
-                    endCass = vertices[GridToId(o, 48)].gameObject;
+                    endCass = GridToId(48, o);
                     break;
                 case 1:
                     mapVertices[48, o] = true;
-                    endCass = vertices[GridToId(48, o)].gameObject;
+                    endCass = GridToId(o, 48);
                     break;
                 case 2:
                     mapVertices[o, 0] = true;
-                    endCass = vertices[GridToId(o, 0)].gameObject;
+                    endCass = GridToId(0, o);
                     break;
                 case 3:
                     mapVertices[0, o] = true;
-                    endCass = vertices[GridToId(0, o)].gameObject;
+                    endCass = GridToId(o,0);
                     break;
             }
-
-
+            
             for (i = 0; i < numRows; i++)
             {
                 for (j = 0; j < numCols; j++)
                 {
-                    position.x = j * cellSize;
-                    position.z = i * cellSize;
+                    position.x = j * cellSize + 0.5f;
+                    position.z = i * cellSize + 0.5f;
                     id = GridToId(j, i);
                     if (mapVertices[i, j])
                         vertexObjs[id] = Instantiate(vertexPrefab, position, Quaternion.identity) as GameObject;
@@ -182,11 +183,12 @@ namespace UCM.IAV.Navegacion
                     SetNeighbours(j, i, get8Vicinity);
                 }
             }
+
         }
 
         public GameObject getEndCass()
         {
-            return endCass;
+            return vertices[endCass].gameObject;
         }
 
         void randMap(location ini)
@@ -202,7 +204,7 @@ namespace UCM.IAV.Navegacion
                 location curr = lAux.Peek();
 
                 location next = makeConnection(curr);
-                if(next != null)
+                if (next != null)
                 {
                     lAux.Push(next);
                 }
@@ -231,12 +233,12 @@ namespace UCM.IAV.Navegacion
                     return (new location(nx, ny));
                 }
             }
-            
+
 
             return null;
         }
 
-         location[] shuffle()
+        location[] shuffle()
         {
             location[] aux = new location[4];
             int r = Random.Range(0, 4);
@@ -323,9 +325,9 @@ namespace UCM.IAV.Navegacion
         public override void Load()
         {
             playerIniPos = new location(0, 0);
-            if(!randomMap)
+            if (!randomMap)
                 LoadMap(mapName);
-            else 
+            else
                 LoadRandMap();
             Instantiate(playerPrefab, new Vector3(playerIniPos.y * cellSize /*+ (cellSize / 2)*/, 0, playerIniPos.x * cellSize /*+ (cellSize / 2)*/), playerIniRot);
         }
@@ -378,7 +380,7 @@ namespace UCM.IAV.Navegacion
                 neighbors[vertexId].Add(vertices[id]);
                 Vector2 act = IdToGrid(vertexId);
                 Vector2 neig = IdToGrid(id);
-                costs[vertexId].Add((neig-act).magnitude*defaultCost);
+                costs[vertexId].Add((neig - act).magnitude * defaultCost);
             }
         }
 

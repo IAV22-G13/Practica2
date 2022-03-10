@@ -56,7 +56,7 @@ namespace UCM.IAV.Navegacion
             Vector3 direccion = objetivo.transform.position - this.transform.position;
             float distance = direccion.magnitude;
 
-            if (distance < 0.5 && distance > -0.5)
+            if (distance < 0.3 && distance > -0.3)
             {
                 Vertex act = path[path.Count - 1];
                 path[path.Count - 1].GetComponent<MeshRenderer>().material = materialOld;

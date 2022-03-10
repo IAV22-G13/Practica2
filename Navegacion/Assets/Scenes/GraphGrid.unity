@@ -300,7 +300,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graph: {fileID: 1574568752}
   algorithm: 0
-  smoothPath: 0
+  smoothPath: 1
   vertexTag: Vertex
   obstacleTag: Wall
   pathColor: {r: 0.98039216, g: 0.9033479, b: 0.015686247, a: 1}
@@ -592,6 +592,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92c7ba813361eb440bd89eec0ad19087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  raySize: 0.4
   vertexPrefab: {fileID: 100000, guid: a0702439d05d5334e885e87aeba2a438, type: 3}
   path: []
   obstaclePrefab: {fileID: 100000, guid: 403c7d1fcaa50ea4e8acd406751a88fd, type: 3}
@@ -602,7 +603,7 @@ MonoBehaviour:
   cellSize: 1
   defaultCost: 1
   maximumCost: Infinity
-  randomMap: 0
+  randomMap: 1
 --- !u!4 &1574568753
 Transform:
   m_ObjectHideFlags: 0
