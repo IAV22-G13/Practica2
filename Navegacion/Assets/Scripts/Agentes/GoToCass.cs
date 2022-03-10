@@ -92,6 +92,22 @@ namespace UCM.IAV.Navegacion
             return result;
         }
 
+        public void DrawPath(Material m)
+        {
+            this.GetComponent<LineRenderer>().positionCount = path.Count + 1;
+            for (int i = 0; i < path.Count; i++)
+            {
+                path[i].GetComponent<MeshRenderer>().material = m;
+                Vector3 pos = path[i].gameObject.transform.position;
+                pos.y = 1;
+                this.GetComponent<LineRenderer>().SetPosition(i, pos);
+                Debug.Log(pos);
+            }
+            Vector3 p = this.gameObject.transform.position;
+            p.y = 1;
+            this.GetComponent<LineRenderer>().SetPosition(path.Count, p);
+        }
+        
         public void ShowPath(List<Vertex> path, Color color)
         {
             int i;
@@ -102,22 +118,6 @@ namespace UCM.IAV.Navegacion
                 if (ReferenceEquals(r, null))
                     continue;
                 r.material.color = color;
-            }
-        }
-
-        public void DrawPath(Material m)
-        {
-            for (int i = 0; i < path.Count; i++)
-            {
-                path[i].GetComponent<MeshRenderer>().material = m;
-                Vector3 pos;
-                if (i == 0)
-                    pos = this.gameObject.transform.position;
-                else
-                    pos = path[i].gameObject.transform.position;
-                pos.y = 2;
-                this.GetComponent<LineRenderer>().positionCount = path.Count;
-                this.GetComponent<LineRenderer>().SetPosition(i, pos);
             }
         }
     }
