@@ -299,8 +299,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graph: {fileID: 1574568752}
-  algorithm: 0
-  smoothPath: 1
+  algorithm: 2
+  smoothPath: 0
   vertexTag: Vertex
   obstacleTag: Wall
   pathColor: {r: 0.98039216, g: 0.9033479, b: 0.015686247, a: 1}
@@ -603,7 +603,7 @@ MonoBehaviour:
   cellSize: 1
   defaultCost: 1
   maximumCost: Infinity
-  randomMap: 1
+  randomMap: 0
 --- !u!4 &1574568753
 Transform:
   m_ObjectHideFlags: 0

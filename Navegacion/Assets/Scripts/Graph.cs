@@ -19,24 +19,32 @@ namespace UCM.IAV.Navegacion
     using UnityEngine;
     using System.Collections;
     using System.Collections.Generic;
+    using System;
 
     /// <summary>
     /// Abstract class for graphs
     /// </summary>
 
-    struct NodeRecord
+    public class NodeRecord : IComparable<NodeRecord>
     {
         public Vertex vertex;
         public Vertex connection;
         public float costSoFar;
         public float estimatedTotalCost;
 
-        public NodeRecord(Vertex vertex, Vertex conec, float costSoFar, float estimatedTotalCost)
+        public NodeRecord()
         {
-            this.vertex = vertex;
-            this.connection = conec;
-            this.costSoFar = costSoFar;
-            this.estimatedTotalCost = estimatedTotalCost;
+            this.vertex = null;
+            this.connection = null;
+            this.costSoFar = 0;
+            this.estimatedTotalCost = 0;
+        }
+
+        public int CompareTo(NodeRecord b)
+        {
+            if (this.estimatedTotalCost < b.estimatedTotalCost) return -1;
+            else if (this.estimatedTotalCost > b.estimatedTotalCost) return 1;
+            return 0;
         }
 
         public static bool operator ==(NodeRecord a, NodeRecord b)
@@ -45,6 +53,16 @@ namespace UCM.IAV.Navegacion
             else return false;
         }
         public static bool operator !=(NodeRecord a, NodeRecord b) => !(a == b);
+
+        public static bool operator <=(NodeRecord a, NodeRecord b)
+        {
+            return a.estimatedTotalCost <= b.estimatedTotalCost;
+        }
+
+        public static bool operator >=(NodeRecord a, NodeRecord b)
+        {
+            return a.estimatedTotalCost >= b.estimatedTotalCost;
+        }
     }
 
     public abstract class Graph : MonoBehaviour
@@ -162,32 +180,36 @@ namespace UCM.IAV.Navegacion
             return new List<Vertex>();
         }
 
-        public List<Vertex> GetPathAstar(GameObject srcO, GameObject dstO, Heuristic h = null)
+        public List<Vertex> GetPathAstar(GameObject srcO, GameObject dstO/*, Heuristic h = null*/)
         {
             Vertex srcOV = srcO.GetComponent<Vertex>();
             Vertex dstOV = dstO.GetComponent<Vertex>();
             // AQUÍ HAY QUE PONER LA IMPLEMENTACIÓN DEL ALGORITMO A*
             NodeRecord startRecord = new NodeRecord();
             startRecord.vertex = srcOV;
-            //startRecord.costSoFar = startRecord.estimatedTotalCost = h.estimated(srcOV);
+            startRecord.costSoFar = startRecord.estimatedTotalCost = ManhattanDist(srcOV, dstOV); //h.estimated(srcOV);
 
-            List<NodeRecord> open = new List<NodeRecord>();     //Lista ordenada por estimatedfTotalCost
+            BinaryHeap<NodeRecord> open = new BinaryHeap<NodeRecord>();     //Lista ordenada por estimatedfTotalCost
+            List<NodeRecord> openList = new List<NodeRecord>();
             open.Add(startRecord);
+            openList.Add(startRecord);
             List<NodeRecord> closed = new List<NodeRecord>();
 
-            NodeRecord current = open[0];
-            while (open.Count > current.estimatedTotalCost)
+            NodeRecord current = open.Top;
+            while (open.Count > 0)
             {
                 if (current.vertex == dstO) break;
 
+                //Recorre los vecinos de current
                 Vertex[] connections = GetNeighbours(current.vertex);
                 for (int i = 0; i < connections.Length; i++)
                 {
                     NodeRecord endNode = new NodeRecord();
                     endNode.vertex = connections[i];
-                    float endNodeCost = current.costSoFar + costs[current.vertex.id][i];
-                    float endNodeHeuristic = 0;
+                    float endNodeCost = current.costSoFar + costs[current.vertex.id][i];    //Coste de llegada al vecino
+                    float endNodeHeuristic;
                     NodeRecord endNodeRecord;
+                    //Si está en lista de procesados
                     if (closed.Contains(endNode))
                     {
                         endNodeRecord = closed[closed.IndexOf(endNode)];
@@ -199,33 +221,41 @@ namespace UCM.IAV.Navegacion
 
                         endNodeHeuristic = endNodeRecord.estimatedTotalCost - endNodeRecord.costSoFar;
                     }
+                    //Si está para procesar
                     else if (open.Contains(endNode))
                     {
-                        endNodeRecord = open[open.IndexOf(endNode)];
+                        endNodeRecord = openList[openList.IndexOf(endNode)];
 
                         if (endNodeRecord.costSoFar <= endNodeCost)
                             continue;
 
                         endNodeHeuristic = endNodeRecord.estimatedTotalCost - endNodeRecord.costSoFar;
                     }
+                    //Primera vez llega
                     else
                     {
                         endNodeRecord = new NodeRecord();
                         endNodeRecord.vertex = endNode.vertex;
 
-                        //endNodeHeuristic = h.edstimated(endNode.vertex);
+                        endNodeHeuristic = ManhattanDist(current.vertex, endNodeRecord.vertex);
                     }
 
                     endNodeRecord.costSoFar = endNodeCost;
-                    endNodeRecord.connection = connections[i];
+                    endNodeRecord.connection = current.vertex; // connections[i];
                     endNodeRecord.estimatedTotalCost = endNodeCost + endNodeHeuristic;
 
                     if (!open.Contains(endNodeRecord))
+                    {
                         open.Add(endNodeRecord);
+                        openList.Add(endNodeRecord);
+                    }
                 }
-
+                //Actualizamos actual, quitamos de open y ponemos en closed
                 open.Remove(current);
+                openList.Remove(current);
                 closed.Add(current);
+                current = open.Top;
+                Debug.Log(open.Count);
             }
             if (current.vertex != dstOV)
                 return new List<Vertex>();
@@ -235,7 +265,9 @@ namespace UCM.IAV.Navegacion
                 while (current.vertex != srcOV)
                 {
                     sol.Insert(0, current.vertex);
-                    //current = closed[closed.IndexOf(current.connection)];
+                    NodeRecord a = new NodeRecord();
+                    a.vertex = current.connection;                    
+                    current = closed[closed.IndexOf(a)];
                 }
 
                 return sol;
@@ -316,7 +348,7 @@ namespace UCM.IAV.Navegacion
 
         public GameObject randCass()
         {
-            int cass = Random.Range(0, vertices.Count-1);
+            int cass = UnityEngine.Random.Range(0, vertices.Count-1);
             return vertices[cass].gameObject;
         }
     }

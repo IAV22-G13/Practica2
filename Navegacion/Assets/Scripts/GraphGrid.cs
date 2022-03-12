@@ -381,9 +381,6 @@ namespace UCM.IAV.Navegacion
                 Vector2 act = IdToGrid(vertexId);
                 Vector2 neig = IdToGrid(id);
                 costs[vertexId].Add((neig - act).magnitude * defaultCost);
-
-                if (vertexObjs[vertexId].GetComponent<Edge>() != null)
-                    vertexObjs[vertexId].GetComponent<Edge>().setEdge(vertexObjs[vertexId].GetComponent<Vertex>(), y);
             }
         }
 

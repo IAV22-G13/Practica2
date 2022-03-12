@@ -74,7 +74,7 @@ namespace UCM.IAV.Navegacion
                 switch (algorithm)
                 {
                     case TesterGraphAlgorithm.ASTAR:
-                        path = graph.GetPathAstar(srcObj, dstObj, null); // Se pasa la heurística
+                        path = graph.GetPathAstar(srcObj, dstObj); // Se pasa la heurística
                         break;
                     default:
                     case TesterGraphAlgorithm.BFS: 
