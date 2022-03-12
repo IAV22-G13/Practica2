@@ -604,6 +604,7 @@ MonoBehaviour:
   defaultCost: 1
   maximumCost: Infinity
   randomMap: 0
+  sizeRandom: 49
 --- !u!4 &1574568753
 Transform:
   m_ObjectHideFlags: 0
@@ -639,6 +640,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679815939551551173, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6679815939551551192, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}

@@ -47,21 +47,24 @@ namespace UCM.IAV.Navegacion
             return 0;
         }
 
-        public static bool operator ==(NodeRecord a, NodeRecord b)
+        public bool Equals(NodeRecord b)
         {
-            if (a.vertex == b.vertex) return true;
-            else return false;
+            return (this.vertex.id == b.vertex.id);
         }
-        public static bool operator !=(NodeRecord a, NodeRecord b) => !(a == b);
-
-        public static bool operator <=(NodeRecord a, NodeRecord b)
+        public override bool Equals(object b)
         {
-            return a.estimatedTotalCost <= b.estimatedTotalCost;
+            NodeRecord bN = (NodeRecord)b;
+            if (ReferenceEquals(b, null)) return false;
+            return (this.vertex.id == bN.vertex.id);
+        }
+        public static bool operator <(NodeRecord a, NodeRecord b)
+        {
+            return a.estimatedTotalCost < b.estimatedTotalCost;
         }
 
-        public static bool operator >=(NodeRecord a, NodeRecord b)
+        public static bool operator >(NodeRecord a, NodeRecord b)
         {
-            return a.estimatedTotalCost >= b.estimatedTotalCost;
+            return a.estimatedTotalCost > b.estimatedTotalCost;
         }
     }
 
@@ -187,7 +190,7 @@ namespace UCM.IAV.Navegacion
             // AQUÍ HAY QUE PONER LA IMPLEMENTACIÓN DEL ALGORITMO A*
             NodeRecord startRecord = new NodeRecord();
             startRecord.vertex = srcOV;
-            startRecord.costSoFar = startRecord.estimatedTotalCost = ManhattanDist(srcOV, dstOV); //h.estimated(srcOV);
+            startRecord.costSoFar = startRecord.estimatedTotalCost = EuclidDist(srcOV, dstOV); //h.estimated(srcOV);
 
             BinaryHeap<NodeRecord> open = new BinaryHeap<NodeRecord>();     //Lista ordenada por estimatedfTotalCost
             List<NodeRecord> openList = new List<NodeRecord>();
@@ -196,9 +199,9 @@ namespace UCM.IAV.Navegacion
             List<NodeRecord> closed = new List<NodeRecord>();
 
             NodeRecord current = open.Top;
-            while (open.Count > 0)
+            while (open.Count != 0)
             {
-                if (current.vertex == dstO) break;
+                if (current.vertex.id == dstOV.id) break;
 
                 //Recorre los vecinos de current
                 Vertex[] connections = GetNeighbours(current.vertex);
@@ -222,7 +225,7 @@ namespace UCM.IAV.Navegacion
                         endNodeHeuristic = endNodeRecord.estimatedTotalCost - endNodeRecord.costSoFar;
                     }
                     //Si está para procesar
-                    else if (open.Contains(endNode))
+                    else if (openList.Contains(endNode))
                     {
                         endNodeRecord = openList[openList.IndexOf(endNode)];
 
@@ -237,7 +240,9 @@ namespace UCM.IAV.Navegacion
                         endNodeRecord = new NodeRecord();
                         endNodeRecord.vertex = endNode.vertex;
 
-                        endNodeHeuristic = ManhattanDist(current.vertex, endNodeRecord.vertex);
+                        endNodeHeuristic = EuclidDist(current.vertex, endNodeRecord.vertex);
+                        open.Add(endNodeRecord);
+                        openList.Add(endNodeRecord);
                     }
 
                     endNodeRecord.costSoFar = endNodeCost;
@@ -255,7 +260,6 @@ namespace UCM.IAV.Navegacion
                 openList.Remove(current);
                 closed.Add(current);
                 current = open.Top;
-                Debug.Log(open.Count);
             }
             if (current.vertex != dstOV)
                 return new List<Vertex>();

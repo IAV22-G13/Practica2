@@ -48,6 +48,8 @@ namespace UCM.IAV.Navegacion
 
         [SerializeField]
         bool randomMap = false;
+        [SerializeField]
+        int sizeRandom;
 
         int numCols;
         int numRows;
@@ -78,8 +80,8 @@ namespace UCM.IAV.Navegacion
 
             Vector3 position = Vector3.zero;
             Vector3 scale = Vector3.zero;
-            numRows = 49;
-            numCols = 49;
+            numRows = sizeRandom;
+            numCols = sizeRandom;
 
             vertices = new List<Vertex>(numRows * numCols);
             neighbors = new List<List<Vertex>>(numRows * numCols);
@@ -116,13 +118,13 @@ namespace UCM.IAV.Navegacion
                     playerIniRot = Quaternion.Euler(0, 0, 0);
                     break;
                 case 2:
-                    mapVertices[o, 48] = true;
-                    randMap(new location(o, 47));
+                    mapVertices[o, sizeRandom-1] = true;
+                    randMap(new location(o, sizeRandom-2));
                     playerIniRot = Quaternion.Euler(0, 270, 0);
                     break;
                 case 3:
-                    mapVertices[48, o] = true;
-                    randMap(new location(47, o));
+                    mapVertices[sizeRandom - 1, o] = true;
+                    randMap(new location(sizeRandom - 2, o));
                     playerIniRot = Quaternion.Euler(0, 180, 0);
                     break;
             }
@@ -130,16 +132,15 @@ namespace UCM.IAV.Navegacion
             o = Random.Range(1, numRows - 1);
             if (o % 2 == 0)
                 o += 1;
-            Debug.Log(o);
             switch (p)
             {
                 case 0:
-                    mapVertices[o, 48] = true;
-                    endCass = GridToId(48, o);
+                    mapVertices[o, sizeRandom - 1] = true;
+                    endCass = GridToId(sizeRandom - 1, o);
                     break;
                 case 1:
-                    mapVertices[48, o] = true;
-                    endCass = GridToId(o, 48);
+                    mapVertices[sizeRandom - 1, o] = true;
+                    endCass = GridToId(o, sizeRandom - 1);
                     break;
                 case 2:
                     mapVertices[o, 0] = true;
