@@ -300,7 +300,7 @@ namespace UCM.IAV.Navegacion
                             neighbors.Add(new List<Vertex>());
                             costs.Add(new List<float>());
                             float y = vertexObjs[id].transform.localScale.y;
-                            scale = new Vector3(cellSize, y, cellSize);
+                            scale = new Vector3(cellSize, y, cellSize);                            
                             vertexObjs[id].transform.localScale = scale;
                             vertexObjs[id].transform.parent = gameObject.transform;
                         }
@@ -381,6 +381,9 @@ namespace UCM.IAV.Navegacion
                 Vector2 act = IdToGrid(vertexId);
                 Vector2 neig = IdToGrid(id);
                 costs[vertexId].Add((neig - act).magnitude * defaultCost);
+
+                if (vertexObjs[vertexId].GetComponent<Edge>() != null)
+                    vertexObjs[vertexId].GetComponent<Edge>().setEdge(vertexObjs[vertexId].GetComponent<Vertex>(), y);
             }
         }
 

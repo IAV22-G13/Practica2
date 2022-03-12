@@ -16,22 +16,22 @@
 namespace UCM.IAV.Navegacion
 {
     using System;
+    using UnityEngine;
 
     /// <summary>
     /// Edge es la conexión entre nodos, un objeto que mantiene un vértice (nodo) y su coste
     /// </summary>
     [System.Serializable]
-    public class Edge : IComparable<Edge>
+    public class Edge : MonoBehaviour, IComparable<Edge>
     {
         public float cost;
         public Vertex vertex;
 
-        public Edge(Vertex vertex = null, float cost = 1f)
+        public void setEdge(Vertex vertex, float cost)
         {
             this.vertex = vertex;
             this.cost = cost;
         }
-
         // Devuelve 0 si son iguales, positivo si este nodo es mayor que other, y negativo si es menor que other
         public int CompareTo(Edge other)
         {

@@ -20,18 +20,20 @@ namespace UCM.IAV.Navegacion
 
         private void OnEnable()
         {
-            if (path != null)
+            this.GetComponent<LineRenderer>().enabled = true;
+            if (path != null && endOfPath == null)
             {
                 path = grafo.GetPathBFS(this.gameObject, endOfPath);
                 path = grafo.Smooth(path);
                 DrawPath(material);
-                //ShowPath(path, Color.red);
             }
         }
 
         private void OnDisable()
         {
-            DrawPath(materialOld);
+            this.GetComponent<LineRenderer>().enabled = false;
+            if(path != null) 
+                DrawPath(materialOld);
         }
 
         public override Direccion GetDireccion()
@@ -46,7 +48,6 @@ namespace UCM.IAV.Navegacion
                 path = grafo.GetPathBFS(this.gameObject, endOfPath);
                 path = grafo.Smooth(path);
                 DrawPath(material);
-                //ShowPath(path, Color.blue);
             }
 
             Direccion result = new Direccion();
@@ -70,17 +71,15 @@ namespace UCM.IAV.Navegacion
                     }
                     path = grafo.GetPathBFS(act.gameObject, grafo.randCass());
                     path = grafo.Smooth(path);
-                    DrawPath(material);
-                    //ShowPath(path, Color.black);
                 }
                 else
                 {
                     //path = grafo.GetPathBFS(act.gameObject, path[0].gameObject);
                     //path = grafo.Smooth(path);
                     //DrawPath(material);
-                    //ShowPath(path, Color.green);
                 }
             }
+            DrawPath(material);
 
             Vector3 targetVelocity = direccion;
             targetVelocity.Normalize();
@@ -92,33 +91,20 @@ namespace UCM.IAV.Navegacion
             return result;
         }
 
-        public void DrawPath(Material m)
-        {
-            this.GetComponent<LineRenderer>().positionCount = path.Count + 1;
-            for (int i = 0; i < path.Count; i++)
-            {
-                path[i].GetComponent<MeshRenderer>().material = m;
-                Vector3 pos = path[i].gameObject.transform.position;
-                pos.y = 1;
-                this.GetComponent<LineRenderer>().SetPosition(i, pos);
-                Debug.Log(pos);
-            }
-            Vector3 p = this.gameObject.transform.position;
-            p.y = 1;
-            this.GetComponent<LineRenderer>().SetPosition(path.Count, p);
-        }
-        
-        public void ShowPath(List<Vertex> path, Color color)
+        public void DrawPath(Material m)
         {
-            int i;
-            for (i = 0; i < path.Count; i++)
+            if (this.GetComponent<LineRenderer>() != null && this.GetComponent<LineRenderer>().enabled)
+                this.GetComponent<LineRenderer>().positionCount = path.Count + 1;
+            for (int i = 0; i < path.Count; i++)
             {
-                Vertex v = path[i];
-                Renderer r = v.GetComponent<Renderer>();
-                if (ReferenceEquals(r, null))
-                    continue;
-                r.material.color = color;
+                if(material != null)
+                    path[i].GetComponent<MeshRenderer>().material = m;
+                Vector3 pos = path[i].gameObject.transform.position;
+                pos.y = 1;                this.GetComponent<LineRenderer>().SetPosition(i, pos);
             }
+            Vector3 p = this.gameObject.transform.position;
+            p.y = 1;
+            this.GetComponent<LineRenderer>().SetPosition(path.Count, p);
         }
     }
 }
