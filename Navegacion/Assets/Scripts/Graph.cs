@@ -74,7 +74,7 @@ namespace UCM.IAV.Navegacion
         public GameObject vertexPrefab;
         protected List<Vertex> vertices;
         protected List<List<Vertex>> neighbors;
-        protected List<List<float>> costs;
+        protected float[] costs;
         //protected Dictionary<int, int> instIdToId;
 
         //// this is for informed search like A*
@@ -111,6 +111,11 @@ namespace UCM.IAV.Navegacion
             if (v.id < 0 || v.id >= neighbors.Count)
                 return new Vertex[0];
             return neighbors[v.id].ToArray();
+        }
+
+        public virtual float[] GetNeighboursCosts(int vertId)
+        {
+            return null;
         }
 
         // Encuentra caminos óptimos
@@ -183,111 +188,60 @@ namespace UCM.IAV.Navegacion
             return new List<Vertex>();
         }
 
-        public List<Vertex> GetPathAstar(GameObject srcO, GameObject dstO/*, Heuristic h = null*/)
+        public List<Vertex> GetPathAstar(GameObject srcO, GameObject dstO, Heuristic h = null)
         {
             if (srcO == null || dstO == null)
                 return new List<Vertex>();
             Vertex srcOV = srcO.GetComponent<Vertex>();
             Vertex dstOV = dstO.GetComponent<Vertex>();
-            // AQUÍ HAY QUE PONER LA IMPLEMENTACIÓN DEL ALGORITMO A*
-            NodeRecord startRecord = new NodeRecord();
-            startRecord.vertex = srcOV;
-            startRecord.costSoFar = startRecord.estimatedTotalCost = EuclidDist(srcOV, dstOV); //h.estimated(srcOV);
 
-            BinaryHeap<NodeRecord> open = new BinaryHeap<NodeRecord>();     //Lista ordenada por estimatedfTotalCost
-            List<NodeRecord> openList = new List<NodeRecord>();
-            open.Add(startRecord);
-            openList.Add(startRecord);
-            List<NodeRecord> closed = new List<NodeRecord>();
+            BinaryHeap<Vertex> open = new BinaryHeap<Vertex>();
 
-            NodeRecord current = open.Top;
-            while (open.Count != 0)
+            srcOV.cost = h(srcOV, dstOV);
+            open.Add(srcOV);
+
+            int[] previous = new int[vertices.Count];
+            float[] costSoFar = new float[vertices.Count];
+            float[] hCost = new float[vertices.Count];
+
+            for (int i = 0; i < vertices.Count; i++)
             {
-                if (current.vertex.id == dstOV.id) 
-                    break;
+                previous[i] = -1;
+                costSoFar[i] = float.PositiveInfinity;
+                hCost[i] = float.PositiveInfinity;
+            }
 
-                open.Remove();
-                openList.Remove(current);
-                //Recorre los vecinos de current
-                Vertex[] connections = GetNeighbours(current.vertex);
-                for (int i = 0; i < connections.Length; i++)
+            previous[srcOV.id] = srcOV.id;
+            costSoFar[srcOV.id] = 0;
+            hCost[srcOV.id] = h(srcOV, dstOV);
+
+            while (open.Count > 0)
+            {
+                Vertex current = open.Remove();
+
+                if (current.id == dstOV.id)
+                    return BuildPath(srcOV.id, dstOV.id, ref previous);
+
+                Vertex[] neighboursAct = GetNeighbours(vertices[current.id]);
+                float[] neighboursCosts = GetNeighboursCosts(current.id);
+
+                for (int n = 0; n < neighboursAct.Length; n++)
                 {
-                    NodeRecord endNode = new NodeRecord();
-                    endNode.vertex = connections[i];
-                    float endNodeCost = current.costSoFar + costs[current.vertex.id][i];    //Coste de llegada al vecino
-                    float endNodeHeuristic;
-                    NodeRecord endNodeRecord;
-                    //Si está en lista de procesados
-                    if (closed.Contains(endNode))
+                    float tent_costSoFar = costSoFar[current.id] + neighboursCosts[n];
+                    if (tent_costSoFar <= costs[neighboursAct[n].id])
                     {
-                        endNodeRecord = closed[closed.IndexOf(endNode)];
+                        previous[neighboursAct[n].id] = current.id;
+                        costSoFar[neighboursAct[n].id] = tent_costSoFar;
+                        hCost[neighboursAct[n].id] = tent_costSoFar + h(neighboursAct[n], dstOV);
+                        neighboursAct[n].cost = hCost[neighboursAct[n].id];
 
-                        if (endNodeRecord.costSoFar <= endNodeCost)
-                            continue;
-
-                        closed.Remove(endNodeRecord);
-
-                        endNodeHeuristic = endNodeRecord.estimatedTotalCost - endNodeRecord.costSoFar;
-                    }
-                    //Si está para procesar
-                    else if (openList.Contains(endNode))
-                    {
-                        endNodeRecord = openList[openList.IndexOf(endNode)];
-
-                        if (endNodeRecord.costSoFar <= endNodeCost)
-                            continue;
-
-                        endNodeHeuristic = endNodeRecord.estimatedTotalCost - endNodeRecord.costSoFar;
-                        open.Remove(endNode);
-                        openList.Remove(endNode);
-                    }
-                    //Primera vez llega
-                    else
-                    {
-                        endNodeRecord = new NodeRecord();
-                        endNodeRecord.vertex = endNode.vertex;
-
-                        endNodeHeuristic = EuclidDist(current.vertex, endNodeRecord.vertex);
-                        open.Add(endNodeRecord);
-                        openList.Add(endNodeRecord);
-                    }
-
-                    endNodeRecord.costSoFar = endNodeCost;
-                    endNodeRecord.connection = current.vertex; // connections[i];
-                    endNodeRecord.estimatedTotalCost = endNodeCost + endNodeHeuristic;
-
-                    if (!open.Contains(endNodeRecord))
-                    {
-                        open.Add(endNodeRecord);
-                        openList.Add(endNodeRecord);
+                        if (!open.Contains(neighboursAct[n]))
+                            open.Add(neighboursAct[n]);
                     }
                 }
-                //Actualizamos actual, quitamos de open y ponemos en closed
-                closed.Add(current);
-                if (open.Count > 0) 
-                    current = open.Top;
-            }
-            if (current.vertex != dstOV)
-            {
-                NodeRecord des = new NodeRecord();
-                des.vertex = dstOV;
-                if (closed.Contains(des)) 
-                    Debug.Log("si estoy");
-                return new List<Vertex>();
-            }
-            else
-            {
-                List<Vertex> sol = new List<Vertex>();
-                while (current.vertex != srcOV)
-                {
-                    sol.Insert(0, current.vertex);
-                    NodeRecord a = new NodeRecord();
-                    a.vertex = current.connection;
-                    current = closed[closed.IndexOf(a)];
-                }
 
-                return sol;
             }
+            return new List<Vertex>();
         }
 
         public List<Vertex> Smooth(List<Vertex> path)
@@ -342,6 +296,7 @@ namespace UCM.IAV.Navegacion
                 path.Add(vertices[prev]);
                 prev = prevList[prev];
             } while (prev != srcId);
+            path.Add(vertices[srcId]);
             return path;
         }
 
@@ -368,91 +323,4 @@ namespace UCM.IAV.Navegacion
             return vertices[cass].gameObject;
         }
     }
-
-    //public virtual Edge[] GetEdges(Vertex v)
-    //{
-    //    //Si no tiene vecinos
-    //    if (ReferenceEquals(neighbors, null) || neighbors.Count == 0)
-    //        return new Edge[0];
-    //    if (v.id < 0 || v.id >= neighbors.Count)
-    //        return new Edge[0];
-    //    //Numero de conexiones que hay
-    //    int numConexiones = neighbors[v.id].Count;
-    //    Edge[] conexiones = new Edge[numConexiones];
-    //    List<Vertex> vertexList = neighbors[v.id];
-    //    List<float> costList = costs[v.id];
-    //    //Por cada una de las conexiones cogemos y nos guardamos la conexion en si
-    //    for (int i = 0; i < numConexiones; i++)
-    //    {
-    //        conexiones[i] = new Edge();
-    //        conexiones[i].cost = costList[i];
-    //        conexiones[i].vertex = vertexList[i];
-    //    }
-    //    return conexiones;
-    //}
-
-    //public List<Vertex> GetPathAstar(GameObject srcO, GameObject dstO, Heuristic h = null)
-    //{
-    //    Vertex src = GetNearestVertex(new Vector3(srcO.transform.position.x, srcO.transform.position.y, srcO.transform.position.z));
-    //    Vertex dst = GetNearestVertex(new Vector3(dstO.transform.position.x, dstO.transform.position.y, dstO.transform.position.z));
-
-    //    //Frontera
-    //    BinaryHeap<Edge> frontera = new BinaryHeap<Edge>();
-    //    Edge[] conexiones;
-    //    Edge nodoActual, child;
-
-
-    //    int size = vertices.Count;
-    //    float[] distValue = new float[size];
-    //    int[] previous = new int[size];
-
-
-    //    nodoActual = new Edge(src, 0);
-    //    frontera.Add(nodoActual);
-    //    distValue[src.id] = 0;
-    //    previous[src.id] = src.id;
-
-    //    for (int i = 0; i < size; i++)
-    //    {
-    //        if (i == src.id)
-    //            continue;
-    //        distValue[i] = Mathf.Infinity;
-    //        previous[i] = -1;
-    //    }
-
-    //    //Mientras haya algun sitio a donde ir...
-    //    while (frontera.Count != 0)
-    //    {
-    //        nodoActual = frontera.Remove();
-    //        int nodeId = nodoActual.vertex.id;
-    //        if (ReferenceEquals(nodoActual.vertex, dst))
-    //        {
-    //            return BuildPath(src.id, nodoActual.vertex.id, ref previous);
-    //        }
-
-    //        conexiones = GetEdges(nodoActual.vertex);
-
-    //        foreach (Edge e in conexiones)
-    //        {
-    //            int eId = e.vertex.id;
-    //            if (previous[eId] != -1)
-    //                continue;
-    //            float cost = distValue[nodeId] + e.cost;
-
-    //            cost += h.estimate(nodoActual.vertex, e.vertex);
-
-
-    //            if (cost < distValue[e.vertex.id])
-    //            {
-    //                distValue[eId] = cost;
-    //                previous[eId] = nodeId;
-    //                frontera.Remove(e);
-    //                child = new Edge(e.vertex, cost);
-    //                frontera.Add(child);
-    //            }
-    //        }
-    //    }
-    //    return new List<Vertex>();
-
-    //}
 }

@@ -603,7 +603,7 @@ MonoBehaviour:
   cellSize: 1
   defaultCost: 1
   maximumCost: Infinity
-  randomMap: 0
+  randomMap: 1
   sizeRandom: 49
 --- !u!4 &1574568753
 Transform:
@@ -654,7 +654,7 @@ PrefabInstance:
     - target: {fileID: 6679815939551551173, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6679815939551551192, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}
@@ -1065,7 +1065,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &6730931225759726815
 MonoBehaviour:
   m_ObjectHideFlags: 0
