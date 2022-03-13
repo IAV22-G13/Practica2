@@ -17,24 +17,36 @@ namespace UCM.IAV.Navegacion
         private List<Vertex> path = null;
         private GameObject endOfPath = null;
 
+        private void Start()
+        {
+            if (this.gameObject.GetComponent<ControlJugador>() != null && grafo.getEndCass() != null)
+                endOfPath = grafo.getEndCass();
+            else
+                endOfPath = grafo.randCass();
+        }
+
         private void OnEnable()
         {
+
+            if (this.gameObject.GetComponent<ControlJugador>() != null && grafo.getEndCass() != null)
+                endOfPath = grafo.getEndCass();
+            else
+                endOfPath = grafo.randCass();
+
             if (this.GetComponent<LineRenderer>() != null)
                 this.GetComponent<LineRenderer>().enabled = true;
-            if (path != null && endOfPath == null)
-            {
-                path = grafo.GetPathBFS(this.gameObject, endOfPath);
-                if (GameManager.instance.getSuavizado())
-                    path = grafo.Smooth(path);
-                DrawPath(material);
-            }
+
+            path = grafo.GetPathAstar(grafo.GetNearestVertex(this.transform.position).gameObject, endOfPath, grafo.EuclidDist);
+            if (GameManager.instance.getSuavizado())
+                path = grafo.Smooth(path);
+            DrawPath(material);
         }
 
         private void OnDisable()
         {
             if (this.GetComponent<LineRenderer>() != null)
                 this.GetComponent<LineRenderer>().enabled = false;
-            if(path != null) 
+            if (path != null)
                 DrawPath(materialOld);
         }
 
@@ -42,12 +54,8 @@ namespace UCM.IAV.Navegacion
         {
             if (path == null)
             {
-                if (this.gameObject.GetComponent<ControlJugador>() != null && grafo.getEndCass() != null)
-                    endOfPath = grafo.getEndCass();
-                else
-                    endOfPath = grafo.randCass();
-
-                path = grafo.GetPathAstar(this.gameObject, endOfPath, grafo.EuclidDist);
+                path = grafo.GetPathAstar(grafo.GetNearestVertex(this.transform.position).gameObject, endOfPath, grafo.EuclidDist);
+                Debug.Log(path.Count);
                 if (GameManager.instance.getSuavizado())
                     path = grafo.Smooth(path);
                 DrawPath(material);
@@ -72,7 +80,7 @@ namespace UCM.IAV.Navegacion
                         path = null;
                         return new Direccion();
                     }
-                    path = grafo.GetPathBFS(act.gameObject, grafo.randCass());
+                    path = grafo.GetPathAstar(act.gameObject, grafo.randCass(), grafo.EuclidDist);
                     path = grafo.Smooth(path);
                 }
             }
@@ -94,7 +102,7 @@ namespace UCM.IAV.Navegacion
                 this.GetComponent<LineRenderer>().positionCount = path.Count + 1;
             for (int i = 0; i < path.Count; i++)
             {
-                if(material != null)
+                if (material != null)
                     path[i].GetComponent<MeshRenderer>().material = m;
                 Vector3 pos = path[i].gameObject.transform.position;
                 pos.y = 1;                if (this.GetComponent<LineRenderer>() != null)

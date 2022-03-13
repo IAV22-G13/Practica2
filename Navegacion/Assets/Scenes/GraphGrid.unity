@@ -601,7 +601,7 @@ MonoBehaviour:
   minotaurPrefab: {fileID: 1879744708374735123, guid: 88082a247174066429ea90b9baca3573,
     type: 3}
   mapsDir: Maps
-  mapName: test.map
+  mapName: Arena.map
   get8Vicinity: 0
   cellSize: 1
   defaultCost: 1

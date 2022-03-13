@@ -29,6 +29,7 @@ namespace UCM.IAV.Navegacion
             vList = gP.poison(this.gameObject);
             lastCass = gP.GetNearestVertex(this.transform.position);
             id = gP.IdToGrid(lastCass.id);
+
             lastCass.GetComponent<MeshRenderer>().material = actualCass;
             gP.mapVertices[(int)id.x, (int)id.y] = false;
 
