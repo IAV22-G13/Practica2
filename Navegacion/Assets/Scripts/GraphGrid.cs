@@ -412,8 +412,8 @@ namespace UCM.IAV.Navegacion
 
         public override Vertex GetNearestVertex(Vector3 position)
         {
-            int col = (int)(position.x / cellSize);
-            int row = (int)(position.z / cellSize);
+            int col = (int)Mathf.Round(position.x / cellSize);
+            int row = (int)Mathf.Round(position.z / cellSize);
             Vector2 p = new Vector2(col, row);
             List<Vector2> explored = new List<Vector2>();
             Queue<Vector2> queue = new Queue<Vector2>();
