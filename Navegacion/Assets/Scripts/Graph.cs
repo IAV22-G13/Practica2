@@ -317,12 +317,6 @@ namespace UCM.IAV.Navegacion
             return Mathf.Abs(posA.x - posB.x) + Mathf.Abs(posA.y - posB.y);
         }
 
-        public GameObject randCass()
-        {
-            int cass = UnityEngine.Random.Range(0, vertices.Count - 1);
-            return vertices[cass].gameObject;
-        }
-
         public Vertex[] poison(GameObject o)
         {
             Vertex act = GetNearestVertex(o.transform.position);
