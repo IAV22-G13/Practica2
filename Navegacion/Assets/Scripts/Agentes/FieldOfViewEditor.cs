@@ -23,7 +23,7 @@ namespace UCM.IAV.Navegacion
             Handles.color = Color.red;
             foreach (Transform visibleTarget in fow.visibleTargets)
             {
-                Handles.DrawLine(fow.transform.position, visibleTarget.position);
+                //Handles.DrawLine(fow.transform.position, visibleTarget.position);
             }
         }
     }
