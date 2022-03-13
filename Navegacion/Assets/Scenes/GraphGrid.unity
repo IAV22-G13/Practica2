@@ -300,7 +300,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graph: {fileID: 1574568752}
   algorithm: 2
-  smoothPath: 0
   vertexTag: Vertex
   obstacleTag: Wall
   pathColor: {r: 0.98039216, g: 0.9033479, b: 0.015686247, a: 1}
@@ -319,6 +318,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &497489088 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1879744708374735123, guid: 88082a247174066429ea90b9baca3573,
+    type: 3}
+  m_PrefabInstance: {fileID: 5151875617127830989}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &497489089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497489088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07757da53964e5347bf9ace80de9f7c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gP: {fileID: 1574568752}
+  poisonedCost: 8
+  clearCost: 1
 --- !u!850595691 &739135557
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -926,7 +946,7 @@ PrefabInstance:
     - target: {fileID: 1879744708374735123, guid: 88082a247174066429ea90b9baca3573,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88082a247174066429ea90b9baca3573, type: 3}

@@ -322,5 +322,11 @@ namespace UCM.IAV.Navegacion
             int cass = UnityEngine.Random.Range(0, vertices.Count - 1);
             return vertices[cass].gameObject;
         }
+
+        public Vertex[] poison(GameObject o)
+        {
+            Vertex act = GetNearestVertex(o.transform.position);
+            return GetNeighbours(act);
+        }
     }
 }
