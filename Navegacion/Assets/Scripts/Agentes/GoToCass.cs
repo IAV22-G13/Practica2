@@ -6,8 +6,7 @@ namespace UCM.IAV.Navegacion
 {
     public class GoToCass : ComportamientoAgente
     {
-        [SerializeField]
-        GraphGrid grafo;
+        public GraphGrid grafo;
         [SerializeField]
         float velocity;
         [SerializeField]

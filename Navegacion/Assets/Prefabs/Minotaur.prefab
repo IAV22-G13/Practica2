@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 1879744708374735149}
   - component: {fileID: 1879744708374735122}
   - component: {fileID: 1879744708374735150}
+  - component: {fileID: 1192174995386465424}
   m_Layer: 6
   m_Name: Minotaur
   m_TagString: Untagged
@@ -216,6 +217,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   visibleTargets: []
+--- !u!114 &1192174995386465424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879744708374735123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07757da53964e5347bf9ace80de9f7c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gP: {fileID: 0}
+  poisonedCost: 8
+  clearCost: 1
 --- !u!1 &3569706831461015662
 GameObject:
   m_ObjectHideFlags: 0

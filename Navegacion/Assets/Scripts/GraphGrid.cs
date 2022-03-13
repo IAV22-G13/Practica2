@@ -34,6 +34,7 @@ namespace UCM.IAV.Navegacion
     {
         public GameObject obstaclePrefab;
         public GameObject playerPrefab;
+        public GameObject minotaurPrefab;
         public string mapsDir = "Maps"; // Directorio por defecto
         public string mapName = "arena.map"; // Fichero por defecto
         public bool get8Vicinity = false;
@@ -328,7 +329,12 @@ namespace UCM.IAV.Navegacion
                 LoadMap(mapName);
             else
                 LoadRandMap();
-            Instantiate(playerPrefab, new Vector3(playerIniPos.y * cellSize /*+ (cellSize / 2)*/, 0, playerIniPos.x * cellSize /*+ (cellSize / 2)*/), playerIniRot);
+            GameObject p = Instantiate(playerPrefab, new Vector3(playerIniPos.y * cellSize /*+ (cellSize / 2)*/, 0, playerIniPos.x * cellSize /*+ (cellSize / 2)*/), playerIniRot);
+            p.GetComponent<GoToCass>().grafo = this;
+            GameObject g = randCass();
+            GameObject m = Instantiate(minotaurPrefab, g.transform.position, playerIniRot);
+            m.GetComponent<GoToCass>().grafo = this;
+            m.GetComponent<PoisonCass>().gP = this;
         }
 
         protected void SetNeighbours(int x, int y, bool get8 = true)
