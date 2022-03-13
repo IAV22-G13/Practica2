@@ -185,6 +185,8 @@ namespace UCM.IAV.Navegacion
 
         public List<Vertex> GetPathAstar(GameObject srcO, GameObject dstO/*, Heuristic h = null*/)
         {
+            if (srcO == null || dstO == null)
+                return new List<Vertex>();
             Vertex srcOV = srcO.GetComponent<Vertex>();
             Vertex dstOV = dstO.GetComponent<Vertex>();
             // AQUÍ HAY QUE PONER LA IMPLEMENTACIÓN DEL ALGORITMO A*
@@ -201,8 +203,11 @@ namespace UCM.IAV.Navegacion
             NodeRecord current = open.Top;
             while (open.Count != 0)
             {
-                if (current.vertex.id == dstOV.id) break;
+                if (current.vertex.id == dstOV.id) 
+                    break;
 
+                open.Remove();
+                openList.Remove(current);
                 //Recorre los vecinos de current
                 Vertex[] connections = GetNeighbours(current.vertex);
                 for (int i = 0; i < connections.Length; i++)
@@ -233,6 +238,8 @@ namespace UCM.IAV.Navegacion
                             continue;
 
                         endNodeHeuristic = endNodeRecord.estimatedTotalCost - endNodeRecord.costSoFar;
+                        open.Remove(endNode);
+                        openList.Remove(endNode);
                     }
                     //Primera vez llega
                     else
@@ -256,13 +263,18 @@ namespace UCM.IAV.Navegacion
                     }
                 }
                 //Actualizamos actual, quitamos de open y ponemos en closed
-                open.Remove(current);
-                openList.Remove(current);
                 closed.Add(current);
-                current = open.Top;
+                if (open.Count > 0) 
+                    current = open.Top;
             }
             if (current.vertex != dstOV)
+            {
+                NodeRecord des = new NodeRecord();
+                des.vertex = dstOV;
+                if (closed.Contains(des)) 
+                    Debug.Log("si estoy");
                 return new List<Vertex>();
+            }
             else
             {
                 List<Vertex> sol = new List<Vertex>();
@@ -270,7 +282,7 @@ namespace UCM.IAV.Navegacion
                 {
                     sol.Insert(0, current.vertex);
                     NodeRecord a = new NodeRecord();
-                    a.vertex = current.connection;                    
+                    a.vertex = current.connection;
                     current = closed[closed.IndexOf(a)];
                 }
 
@@ -294,7 +306,7 @@ namespace UCM.IAV.Navegacion
                 Vector3 fromPt = outputpath[outputpath.Count - 1].transform.position;
                 Vector3 toPt = path[index].transform.position;
                 fromPt.y = 0.5f;
-                toPt.y = 0.5f;               
+                toPt.y = 0.5f;
 
                 Vector3 fromPt1 = new Vector3(fromPt.x - raySize, fromPt.y, fromPt.z - raySize);
                 Vector3 fromPt2 = new Vector3(fromPt.x + raySize, fromPt.y, fromPt.z - raySize);
@@ -352,7 +364,7 @@ namespace UCM.IAV.Navegacion
 
         public GameObject randCass()
         {
-            int cass = UnityEngine.Random.Range(0, vertices.Count-1);
+            int cass = UnityEngine.Random.Range(0, vertices.Count - 1);
             return vertices[cass].gameObject;
         }
     }
