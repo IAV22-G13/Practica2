@@ -85,7 +85,7 @@ namespace UCM.IAV.Navegacion
 
             vertices = new List<Vertex>(numRows * numCols);
             neighbors = new List<List<Vertex>>(numRows * numCols);
-            costs = new List<List<float>>(numRows * numCols);
+            costs = new float[numRows * numCols];
             vertexObjs = new GameObject[numRows * numCols];
             mapVertices = new bool[numRows, numCols];
 
@@ -118,8 +118,8 @@ namespace UCM.IAV.Navegacion
                     playerIniRot = Quaternion.Euler(0, 0, 0);
                     break;
                 case 2:
-                    mapVertices[o, sizeRandom-1] = true;
-                    randMap(new location(o, sizeRandom-2));
+                    mapVertices[o, sizeRandom - 1] = true;
+                    randMap(new location(o, sizeRandom - 2));
                     playerIniRot = Quaternion.Euler(0, 270, 0);
                     break;
                 case 3:
@@ -148,10 +148,10 @@ namespace UCM.IAV.Navegacion
                     break;
                 case 3:
                     mapVertices[0, o] = true;
-                    endCass = GridToId(o,0);
+                    endCass = GridToId(o, 0);
                     break;
-            }
-            
+            }
+
             for (i = 0; i < numRows; i++)
             {
                 for (j = 0; j < numCols; j++)
@@ -168,7 +168,6 @@ namespace UCM.IAV.Navegacion
                     v.id = id;
                     vertices.Add(v);
                     neighbors.Add(new List<Vertex>());
-                    costs.Add(new List<float>());
                     float y = vertexObjs[id].transform.localScale.y;
                     scale = new Vector3(cellSize, y, cellSize);
                     vertexObjs[id].transform.localScale = scale;
@@ -274,7 +273,7 @@ namespace UCM.IAV.Navegacion
 
                     vertices = new List<Vertex>(numRows * numCols);
                     neighbors = new List<List<Vertex>>(numRows * numCols);
-                    costs = new List<List<float>>(numRows * numCols);
+                    costs = new float[numRows * numCols];
                     vertexObjs = new GameObject[numRows * numCols];
                     mapVertices = new bool[numRows, numCols];
 
@@ -299,9 +298,8 @@ namespace UCM.IAV.Navegacion
                             v.id = id;
                             vertices.Add(v);
                             neighbors.Add(new List<Vertex>());
-                            costs.Add(new List<float>());
                             float y = vertexObjs[id].transform.localScale.y;
-                            scale = new Vector3(cellSize, y, cellSize);                            
+                            scale = new Vector3(cellSize, y, cellSize);
                             vertexObjs[id].transform.localScale = scale;
                             vertexObjs[id].transform.parent = gameObject.transform;
                         }
@@ -340,7 +338,7 @@ namespace UCM.IAV.Navegacion
             int i, j;
             int vertexId = GridToId(x, y);
             neighbors[vertexId] = new List<Vertex>();   //??????????
-            costs[vertexId] = new List<float>();        //??????????
+            costs[vertexId] = new float();
             Vector2[] pos = new Vector2[0];             //??????????
             if (get8)
             {
@@ -369,25 +367,41 @@ namespace UCM.IAV.Navegacion
             {
                 i = (int)p.y;
                 j = (int)p.x;
-                if (i < 0 || j < 0)                     //???????????????
-                    continue;
-                if (i >= numRows || j >= numCols)
-                    continue;
-                if (i == row && j == col)
-                    continue;
-                if (!mapVertices[i, j])
+                if (i < 0 || j < 0 || i >= numRows || j >= numCols || (i == row && j == col) || !mapVertices[i, j])
                     continue;
                 int id = GridToId(j, i);
                 neighbors[vertexId].Add(vertices[id]);
-                Vector2 act = IdToGrid(vertexId);
-                Vector2 neig = IdToGrid(id);
-                costs[vertexId].Add((neig - act).magnitude * defaultCost);
+                costs[vertexId] = defaultCost;
             }
         }
 
         public void changeMapStyle()
         {
             randomMap = !randomMap;
+        }
+
+        public override float[] GetNeighboursCosts(int vertId)
+        {
+            Vector2[] pos = new Vector2[4];
+            Vector2 p = IdToGrid(vertId);
+            pos[0] = new Vector2(p.x, p.y - 1);
+            pos[1] = new Vector2(p.x - 1, p.y);
+            pos[2] = new Vector2(p.x + 2, p.y);
+            pos[3] = new Vector2(p.x, p.y + 1);
+
+            int tam = neighbors[vertId].Count;
+            float[] n = new float[tam];
+
+            for (int i = 0; i < tam; i++)
+            {
+                int x = (int)pos[i].y;
+                int y = (int)pos[i].x;
+                if (x < 0 || y < 0 || x >= numRows || y >= numCols || !mapVertices[x, y])
+                    continue;
+                n[i] = costs[GridToId(x, y)];
+            }
+
+            return n;
         }
 
         public override Vertex GetNearestVertex(Vector3 position)
