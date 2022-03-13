@@ -150,8 +150,8 @@ namespace UCM.IAV.Navegacion
                     mapVertices[0, o] = true;
                     endCass = GridToId(o, 0);
                     break;
-            }
-
+            }
+
             for (i = 0; i < numRows; i++)
             {
                 for (j = 0; j < numCols; j++)
@@ -299,7 +299,7 @@ namespace UCM.IAV.Navegacion
                             vertices.Add(v);
                             neighbors.Add(new List<Vertex>());
                             float y = vertexObjs[id].transform.localScale.y;
-                            scale = new Vector3(cellSize, y, cellSize);
+                            scale = new Vector3(cellSize, y, cellSize);
                             vertexObjs[id].transform.localScale = scale;
                             vertexObjs[id].transform.parent = gameObject.transform;
                         }
@@ -375,28 +375,33 @@ namespace UCM.IAV.Navegacion
             }
         }
 
-        public override float[] GetNeighboursCosts(int vertId)
+        public void changeMapStyle()
         {
-            Vector2[] pos = new Vector2[4];
-            Vector2 p = IdToGrid(vertId);
-            pos[0] = new Vector2(p.x, p.y - 1);
-            pos[1] = new Vector2(p.x - 1, p.y);
-            pos[2] = new Vector2(p.x + 2, p.y);
-            pos[3] = new Vector2(p.x, p.y + 1);
+            randomMap = !randomMap;
+        }
 
-            int tam = neighbors[vertId].Count;
-            float[] n = new float[tam];
-
-            for (int i = 0; i < tam; i++)
-            {
+        public override float[] GetNeighboursCosts(int vertId)
+        {
+            Vector2[] pos = new Vector2[4];
+            Vector2 p = IdToGrid(vertId);
+            pos[0] = new Vector2(p.x, p.y - 1);
+            pos[1] = new Vector2(p.x - 1, p.y);
+            pos[2] = new Vector2(p.x + 2, p.y);
+            pos[3] = new Vector2(p.x, p.y + 1);
+
+            int tam = neighbors[vertId].Count;
+            float[] n = new float[tam];
+
+            for (int i = 0; i < tam; i++)
+            {
                 int x = (int)pos[i].y;
                 int y = (int)pos[i].x;
-                if (x < 0 || y < 0 || x >= numRows || y >= numCols || !mapVertices[x, y])
-                    continue;
-                n[i] = costs[GridToId(x, y)];
-            }
-
-            return n;
+                if (x < 0 || y < 0 || x >= numRows || y >= numCols || !mapVertices[x, y])
+                    continue;
+                n[i] = costs[GridToId(x, y)];
+            }
+
+            return n;
         }
 
         public override Vertex GetNearestVertex(Vector3 position)

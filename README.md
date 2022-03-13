@@ -58,135 +58,59 @@ calcular el camino que une esos dos puntos.
 
 -Algoritmo generación caminos eficiente = A*
 
-function pathfindAStar(graph: Graph, start: Node, end: Node, heuristic: Heuristic) -> Connection();
-    # This structure is used to keep track of the
-    # information we need for each node. 
-    class NodeRecord:
-        node: Node
-        connection: Connection 
-        costSoFar: float
-        estimatedlotalCost: float
+    function reconstruct_path(cameFrom, current)
+        total_path := {current}
+        while current in cameFrom.Keys:
+            current := cameFrom[current]
+            total_path.prepend(current)
+        return total_path
 
-    # Initialize the record for the start node.
-    startRecord = new NodeRecord()
-    startRecord.node = start
-    startRecord.connection = null
-    startRecord.costSoFar =
-    startRecord.estimatedTotalCost = heuristic.estimate(start)
+    // A* finds a path from start to goal.
+    // h is the heuristic function. h(n) estimates the cost to reach goal from node n.
+    function A_Star(start, goal, h)
+        // The set of discovered nodes that may need to be (re-)expanded.
+        // Initially, only the start node is known.
+        // This is usually implemented as a min-heap or priority queue rather than a hash-set.
+        openSet := {start}
 
-    # Initialize the open and closed lists. 
-    open = new PathfindingList()
-    open += startRecord
-    closed = new PathfindingList()
+    // For node n, cameFrom[n] is the node immediately preceding it on the cheapest path from start
+    // to n currently known.
+    cameFrom := an empty map
 
-    # Iterate through processing each node. 
-    while length(open) >
-        # Find the smallest element in the open list (using the
-        # estimatedTotalCost).
-        current = open.smallestElement()
+    // For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
+    gScore := map with default value of Infinity
+    gScore[start] := 0
 
-        # If it is the goal node, then terminate.
-        if current.node == goal:
-            break
+    // For node n, fScore[n] := gScore[n] + h(n). fScore[n] represents our current best guess as to
+    // how short a path from start to finish can be if it goes through n.
+    fScore := map with default value of Infinity
+    fScore[start] := h(start)
 
-        # Otherwise get its outgoing connections.
-        connections = graph. getConnections( current)
+    while openSet is not empty
+        // This operation can occur in O(Log(N)) time if openSet is a min-heap or a priority queue
+        current := the node in openSet having the lowest fScore[] value
+        if current = goal
+            return reconstruct_path(cameFrom, current)
 
-        # Loop through each connection in turn.
-        for connection in connections:
-            # Get the cost estimate for the end node. 
-            endNode = connection.getToNode()
-            endNodeCost = current.costSoFar + connection.getCost()
+        openSet.Remove(current)
+        for each neighbor of current
+            // d(current,neighbor) is the weight of the edge from current to neighbor
+            // tentative_gScore is the distance from start to the neighbor through current
+            tentative_gScore := gScore[current] + d(current, neighbor)
+            if tentative_gScore < gScore[neighbor]
+                // This path to neighbor is better than any previous one. Record it!
+                cameFrom[neighbor] := current
+                gScore[neighbor] := tentative_gScore
+                fScore[neighbor] := tentative_gScore + h(neighbor)
+                if neighbor not in openSet
+                    openSet.add(neighbor)
 
-            # If the node is closed we may have to skip, or remove it
-            # from the closed list.
-            if closed.contains(endNode):
-                # Here we find the record in the closed list
-                # corresponding to the endNode.
-                endNodeRecord = closed.find(endNode)
-
-                # If we didn't find a shorter route, skip. 
-                if endNodeRecord.costSoFar <= endNodeCost: 
-                    continue
-
-                # Otherwise remove it from the closed list. 
-                closed -= endNodeRecord
-
-                # We can use the node's old cost values to calculate
-                # its heuristic without calling the possibly expensive
-                # heuristic function.
-                endNodeHeuristic = endNodeRecord.estimatedTotalCost - 
-                            endNodeRecord.costSoFar
-
-            # Skip if the node is open and we've not found a better
-            # route.
-            else if open.contains(endNode):
-                # Here we find the record in the open list
-                # corresponding to the endNode.
-                endNodeRecord = open.find(endNode)
-
-                # If our route is no better, then skip.
-                if endNodeRecord.costSoFar <= endNodeCost: 
-                    continue
-
-                # Again, we can calculate its heuristic. 
-                endNodeHeuristic = endNodeRecord.cost -
-                                    endNodeRecord.costSoFar
-
-            # Otherwise we know we've got an unvisited node, so make a 
-            # record for it.
-            else:
-                endNodeRecord = new NodeRecord()
-                endNodeRecord.node = endNode
-
-                # Well need to calculate the heuristic value using
-                # the function, since we don't have an existing record 
-                # to use.
-                endNodeHeuristic = heuristic.estimate(endNode)
-
-            # Were here if we need to update the node. Update the 
-            # cost, estimate and connection.
-            endNodeRecord.cost = endNodeCost
-            endNodeRecord. connection = connection 
-            endNodeRecord.estimatedTotalCost = endNodeCost + 
-                                        endNodeHeuristic
-
-            # And add it to the open list. 
-            if not open.contains(endNode): 
-                open += endNodeRecord
-
-        # We've finished looking at the connections for the current
-        # node, so add it to the closed list and remove it from the
-        # open list.
-        open -= current
-        closed += current
-
-    # Were here if we've either found the goal, or if we've no more 
-    # nodes to search, find which.
-    if current.node != goal:
-        # We've run out of nodes without finding the goal, so there's 
-        # no solution.
-        return null
-
-    else:
-        # Compile the list of connections in the path.
-        path = []
-
-        # Work back along the path, accumulating connections. 
-        while current.node != start:
-            path += current.connection
-            current = current.connection.getFromNode()
-
-        # Reverse the path, and return it. 
-        return reverse(path)
+    // Open set is empty but goal was never reached
+    return failure
 
 -Suavizado de caminos = Path Smoothing
 
-function smoothPath(inputPath: Vector[]) -> Vector[]:
-    # If the path is only two nodes long, then we can't smooth it, so
-    # return.
-    if len(inputPath) = 2:
-       return inputPath
+    function smoothPath(inputPath: Vector[]) -> Vector[]:
 
     # Compile an output path.
     outputPath = [inputPath[0]]
@@ -197,10 +121,18 @@ function smoothPath(inputPath: Vector[]) -> Vector[]:
 
     # Loop until we find the last item in the input.
     while inputIndex < len(inputPath) - 1:
-        # Do the ray cast.
+        # Do 4 ray cast that represent de corners of the collider, so the character doesn hit the walls.
         fromPt = outputPath[len(outputPath) - 1]
         toPt = inputPath[inputIndex]
-        if not rayClear(fromPt, toPt):
+        fromPt1 = fromPt + offsets
+        toPt1 = toPt + offsets
+        fromPt2 = fromPt + offsets
+        toPt2 = toPt + offsets
+        fromPt3 = fromPt + offsets
+        toPt3 = toPt + offsets
+        fromPt4 = fromPt + offsets
+        toPt4 = toPt + offsets
+        if not rayClear(fromPt, toPt) and not rayClear(fromPt1, toPt1) and ... rayClear(fromPt4, toPt4):
             # The ray cast failed, add the last node that passed to
             # the output list.
             outputPath += inputPath[inputIndex - 1]
@@ -217,3 +149,82 @@ function smoothPath(inputPath: Vector[]) -> Vector[]:
 -Movimiento de merodeo del minotauro = Selección de un objetivo aleatorio y 
 generación del camino mediante A*
 
+**IMPLEMENTACION FINAL**
+
+-Movimiento del jugador: 
+ 
+Para el movimiento del jugador hemos utilizado el control jugador de la primera práctica modificando algunos
+detalles, y para el movimiento automático hasta la salida, hemos utilizado AStar, la heuristica utilizada es la Distancia Euclidea o Manhattan,
+se puede cambiar con la tecla H. Hasta que el jugador no llega a hasta una pequeña distancia del centro de la casilla
+no empieza a dirigirse a la siguiente, asi evitamos que choque en algunas esquinas.
+
+El hilo de Ariadna se crea desde el componente GoToCass, en el método DrawPath, con ayuda del componente de Unity LineRenderer.
+Se introducen los puntos con LineRenderer.setPosition, y este los une con una linea que representa el hilo.
+Las casillas se colorean de morado (en blanco a penas se veían) en el mismo DrawPath cambiando el material del MeshRenderer.
+
+-Movimiento del Minotauro:
+
+El movimiento aleatorio del minotauro es através del mismo GoToCass que utiliza el jugador, solo que en vez de ir a la salida 
+escoge una casilla aleatoria y se mueve utilizando AStar hasta esa casilla, una vez ha llegado escoge una nueva. Si en el 
+proceso ve al jugador, su movimiento cambia a perseguirle. Este comportamiento se define en el componente FieldOfView, que
+crea una circunferencia, dectecta si el player esta dentro de esta circunferencia y comprueba si está en un angulo de visión 
+respecto la direccíon en la que esta mirando, y si tambien se cumple esta condición lanza 4 raycast desde las esquinas del colider 
+a las esquinas del colider del jugador, y si estos rayos no chocan con ningún obstaculo entonces se mueve hacia él. Si alguna de estas
+condiciones no se cumple, se sigue mviendo en la ultima dirección en la que estaba el player un breve momento, y si aun no lo 
+encuentra entoces vuelve a su movimiento aleatorio.
+
+Cuando se activa o desactiva el suavizado, se realiza tanto para el minotauro como para el player.
+
+-Laberinto:
+
+Existe la posibilidad de crear un mapa aleatorio con pasillos, que se genera de forma procedural dependiendo de 
+la un Random cuya semilla es la hora actual del dia, por lo que siempre genera un mapa diferente. Para ello hemos 
+utilizado el pseudocódigo del libro:
+    
+    #Clase que lleva la casilla a la que refiere
+    class Location:
+     x: int
+     y: int
+
+     function makeConnection(location: Location) -> Location:
+     # Consider neighbors in a random order.
+     neighbors = shuffle(NEIGHBORS)
+
+     x = location.x
+     y = location.y
+
+     for (dx, dy, dirn) in neighbors:
+         # Check if that location is valid.
+         nx = x + dx
+         ny = y + dy
+         fromDirn = 3 - dirn
+
+         if nx >= 0 && nx < numRows && ny >= 0 && ny < numCols && !yaMarcada:   
+             # Perform the connection.
+             cells[x][y].directions[dirn] = true
+             cells[nx][ny].inMaze = true
+             cells[nx][ny].directions[fromDirn] = true
+             return Location(nx, ny)
+
+     # null of the neighbors were valid.
+     return null
+
+     function maze(level: Level, start: Location):
+         # A stack of locations we can branch from.
+         locations = [start]
+         playerIniPos = start;
+
+         while locations:
+         current = locations.top()
+
+         # Try to connect to a neighboring location.
+         next = level.makeConnection(current)
+         if next:
+         # If successful, it will be our next iteration.
+         locations.push(next)
+         else:
+         locations.pop()
+
+Si no para hacer prubas con un mapa con salas puedes utilizar el mapa por defecto.
+
+Para cambiar entre mapa aleatorio y el predefinido utilizaremos la tecla m.

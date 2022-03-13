@@ -30,7 +30,6 @@ namespace UCM.IAV.Navegacion
     {
         public Graph graph;
         public TesterGraphAlgorithm algorithm;
-        public bool smoothPath;
         public string vertexTag = "Vertex"; // Etiqueta de un nodo normal
         public string obstacleTag = "Wall"; // Etiqueta de un obstáculo, tipo pared...
         public Color pathColor;
@@ -77,14 +76,14 @@ namespace UCM.IAV.Navegacion
                         path = graph.GetPathAstar(srcObj, dstObj, graph.EuclidDist);
                         break;
                     default:
-                    case TesterGraphAlgorithm.BFS: 
+                    case TesterGraphAlgorithm.BFS:
                         path = graph.GetPathBFS(srcObj, dstObj);
                         break;
                     case TesterGraphAlgorithm.DFS:
                         path = graph.GetPathDFS(srcObj, dstObj);
-                        break; 
+                        break;
                 }
-                if (smoothPath)
+                if (GameManager.instance.getSuavizado())
                     path = graph.Smooth(path); // Suavizar el camino, una vez calculado
             }
         }
@@ -118,7 +117,7 @@ namespace UCM.IAV.Navegacion
             {
                 v = path[i];
                 Gizmos.DrawSphere(v.transform.position, pathNodeRadius);
-                if (smoothPath && i != 0)
+                if (GameManager.instance.getSuavizado() && i != 0)
                 {
                     Vertex prev = path[i - 1];
                     Gizmos.DrawLine(v.transform.position, prev.transform.position);
@@ -141,7 +140,7 @@ namespace UCM.IAV.Navegacion
                 r.material.color = color;
             }
         }
-        
+
         // Cuantificación, cómo traduce de posiciones del espacio (la pantalla) a nodos
         private GameObject GetNodeFromScreen(Vector3 screenPosition)
         {
