@@ -192,8 +192,8 @@ namespace UCM.IAV.Navegacion
         {
             if (srcO == null || dstO == null)
                 return new List<Vertex>();
-            Vertex srcOV = srcO.GetComponent<Vertex>();
-            Vertex dstOV = dstO.GetComponent<Vertex>();
+            Vertex srcOV = GetNearestVertex(srcO.transform.position);
+            Vertex dstOV = GetNearestVertex(dstO.transform.position);
 
             BinaryHeap<Vertex> open = new BinaryHeap<Vertex>();
 
@@ -228,7 +228,7 @@ namespace UCM.IAV.Navegacion
                 for (int n = 0; n < neighboursAct.Length; n++)
                 {
                     float tent_costSoFar = costSoFar[current.id] + neighboursCosts[n];
-                    if (tent_costSoFar <= costs[neighboursAct[n].id])
+                    if (tent_costSoFar < costSoFar[neighboursAct[n].id])
                     {
                         previous[neighboursAct[n].id] = current.id;
                         costSoFar[neighboursAct[n].id] = tent_costSoFar;

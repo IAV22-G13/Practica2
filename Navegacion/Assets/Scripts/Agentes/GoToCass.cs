@@ -20,7 +20,8 @@ namespace UCM.IAV.Navegacion
 
         private void OnEnable()
         {
-            this.GetComponent<LineRenderer>().enabled = true;
+            if (this.GetComponent<LineRenderer>() != null)
+                this.GetComponent<LineRenderer>().enabled = true;
             if (path != null && endOfPath == null)
             {
                 path = grafo.GetPathBFS(this.gameObject, endOfPath);
@@ -31,7 +32,8 @@ namespace UCM.IAV.Navegacion
 
         private void OnDisable()
         {
-            this.GetComponent<LineRenderer>().enabled = false;
+            if (this.GetComponent<LineRenderer>() != null)
+                this.GetComponent<LineRenderer>().enabled = false;
             if(path != null) 
                 DrawPath(materialOld);
         }
@@ -45,7 +47,7 @@ namespace UCM.IAV.Navegacion
                 else
                     endOfPath = grafo.randCass();
 
-                path = grafo.GetPathBFS(this.gameObject, endOfPath);
+                path = grafo.GetPathAstar(this.gameObject, endOfPath, grafo.EuclidDist);
                 path = grafo.Smooth(path);
                 DrawPath(material);
             }
@@ -69,14 +71,8 @@ namespace UCM.IAV.Navegacion
                         path = null;
                         return new Direccion();
                     }
-                    path = grafo.GetPathBFS(act.gameObject, grafo.randCass());
+                    path = grafo.GetPathAstar(act.gameObject, grafo.randCass(), grafo.EuclidDist);
                     path = grafo.Smooth(path);
-                }
-                else
-                {
-                    //path = grafo.GetPathBFS(act.gameObject, path[0].gameObject);
-                    //path = grafo.Smooth(path);
-                    //DrawPath(material);
                 }
             }
             DrawPath(material);
@@ -100,11 +96,13 @@ namespace UCM.IAV.Navegacion
                 if(material != null)
                     path[i].GetComponent<MeshRenderer>().material = m;
                 Vector3 pos = path[i].gameObject.transform.position;
-                pos.y = 1;                this.GetComponent<LineRenderer>().SetPosition(i, pos);
+                pos.y = 1;                if (this.GetComponent<LineRenderer>() != null)
+                    this.GetComponent<LineRenderer>().SetPosition(i, pos);
             }
             Vector3 p = this.gameObject.transform.position;
             p.y = 1;
-            this.GetComponent<LineRenderer>().SetPosition(path.Count, p);
+            if (this.GetComponent<LineRenderer>() != null)
+                this.GetComponent<LineRenderer>().SetPosition(path.Count, p);
         }
     }
 }
