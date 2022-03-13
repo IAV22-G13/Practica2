@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6679815938908102865}
   - component: {fileID: 6679815938908102871}
   - component: {fileID: 6679815938908102864}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Men
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 3009972413804127435}
   - component: {fileID: 6012025546965511177}
   - component: {fileID: 4259179136712621458}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,7 +322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6679815939845372150}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Theseus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 6679815939994489818}
   - component: {fileID: 6679815939994489816}
   - component: {fileID: 6679815939994489817}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bracers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -442,7 +442,7 @@ GameObject:
   - component: {fileID: 6679815940454145409}
   - component: {fileID: 6679815940454145415}
   - component: {fileID: 6679815940454145408}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Helmet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -524,7 +524,7 @@ GameObject:
   - component: {fileID: 6679815940473554156}
   - component: {fileID: 6679815940473554146}
   - component: {fileID: 6679815940473554147}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Leggings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -605,7 +605,7 @@ GameObject:
   - component: {fileID: 6679815940519107893}
   - component: {fileID: 6679815940519107851}
   - component: {fileID: 6679815940519107892}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sandals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -687,7 +687,7 @@ GameObject:
   - component: {fileID: 6679815940633736288}
   - component: {fileID: 6679815940633736294}
   - component: {fileID: 6679815940633736295}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cuirass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -768,7 +768,7 @@ GameObject:
   - component: {fileID: 6679815940716194759}
   - component: {fileID: 6679815940716194757}
   - component: {fileID: 6679815940716194758}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skirt
   m_TagString: Untagged
   m_Icon: {fileID: 0}

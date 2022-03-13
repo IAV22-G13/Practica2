@@ -636,6 +636,11 @@ PrefabInstance:
       propertyPath: grafo
       value: 
       objectReference: {fileID: 1574568752}
+    - target: {fileID: 6679815938908102866, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6679815939551551173, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}
       propertyPath: m_Name
@@ -643,8 +648,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6679815939551551173, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679815939551551173, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6679815939551551192, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}
@@ -654,7 +664,7 @@ PrefabInstance:
     - target: {fileID: 6679815939551551192, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11.033
+      value: 9.58
       objectReference: {fileID: 0}
     - target: {fileID: 6679815939551551192, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}
@@ -664,7 +674,7 @@ PrefabInstance:
     - target: {fileID: 6679815939551551192, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 12.365
+      value: 16.46
       objectReference: {fileID: 0}
     - target: {fileID: 6679815939551551192, guid: a275a66bfa87b3f43885bcf12f7d7c90,
         type: 3}
@@ -710,6 +720,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Center.y
       value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679815939845372145, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679815939994489819, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679815940454145410, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679815940473554157, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679815940519107894, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679815940633736289, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679815940716194752, guid: a275a66bfa87b3f43885bcf12f7d7c90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a275a66bfa87b3f43885bcf12f7d7c90, type: 3}
@@ -1013,6 +1058,7 @@ GameObject:
   - component: {fileID: 6730931225759726817}
   - component: {fileID: 6730931225759726816}
   - component: {fileID: 6730931225759726815}
+  - component: {fileID: 6730931225759726819}
   m_Layer: 0
   m_Name: Minotaur
   m_TagString: Untagged
@@ -1038,7 +1084,7 @@ MonoBehaviour:
   grafo: {fileID: 1574568752}
   velocity: 0
   material: {fileID: 2100000, guid: 96866e3356417a147b69607a21f0b541, type: 2}
-  materialOld: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  materialOld: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 3}
 --- !u!114 &6730931225759726816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1090,6 +1136,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &6730931225759726819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6730931225759726814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0961bbad452314544a9b914ec5d1526b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  peso: 2
+  prioridad: 2
+  objetivo: {fileID: 0}
+  viewRadius: 5
+  viewAngle: 59
+  speed: 1
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 128
+  visibleTargets: []
 --- !u!4 &6757376107659764480
 Transform:
   m_ObjectHideFlags: 0
