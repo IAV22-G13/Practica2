@@ -17,6 +17,14 @@ namespace UCM.IAV.Navegacion
         private List<Vertex> path = null;
         private GameObject endOfPath = null;
 
+        private void Start()
+        {
+            if (this.gameObject.GetComponent<ControlJugador>() != null && grafo.getEndCass() != null)
+                endOfPath = grafo.getEndCass();
+            else
+                endOfPath = grafo.randCass();
+        }
+
         private void OnEnable()
         {
 

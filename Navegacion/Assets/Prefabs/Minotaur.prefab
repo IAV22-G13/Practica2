@@ -232,9 +232,10 @@ MonoBehaviour:
   gP: {fileID: 0}
   poisonedCost: 8
   clearCost: 1
-  actualCass: {fileID: 0}
-  lowerCass: {fileID: 0}
-  normal: {fileID: 0}
+  actualCass: {fileID: 2100000, guid: 0ca33e7d81e45d34183fb7ba2006ffe9, type: 2}
+  lowerCass: {fileID: -5634944049139579078, guid: 107cf45cccd227e48bb34829fec04c48,
+    type: 3}
+  normal: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &3569706831461015662
 GameObject:
   m_ObjectHideFlags: 0
