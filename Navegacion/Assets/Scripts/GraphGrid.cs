@@ -329,10 +329,10 @@ namespace UCM.IAV.Navegacion
                 LoadMap(mapName);
             else
                 LoadRandMap();
-            GameObject p = Instantiate(playerPrefab, new Vector3(playerIniPos.y * cellSize /*+ (cellSize / 2)*/, 0, playerIniPos.x * cellSize /*+ (cellSize / 2)*/), playerIniRot);
+            GameObject p = Instantiate(playerPrefab, new Vector3(playerIniPos.y * cellSize /*+ (cellSize / 2)*/, playerPrefab.transform.position.y, playerIniPos.x * cellSize /*+ (cellSize / 2)*/), playerIniRot);
             p.GetComponent<GoToCass>().grafo = this;
             GameObject g = randCass();
-            GameObject m = Instantiate(minotaurPrefab, g.transform.position, playerIniRot);
+            GameObject m = Instantiate(minotaurPrefab, new Vector3(g.transform.position.x, minotaurPrefab.transform.position.y, g.transform.position.z) , playerIniRot);
             m.GetComponent<GoToCass>().grafo = this;
             m.GetComponent<PoisonCass>().gP = this;
         }
@@ -447,6 +447,17 @@ namespace UCM.IAV.Navegacion
                 }
             } while (queue.Count != 0);
             return null;
+        }
+
+        public GameObject randCass()
+        {
+            int cass = 0;
+            do
+            {
+                cass = UnityEngine.Random.Range(0, vertices.Count - 1);
+            }
+            while (vertices[cass].gameObject == obstaclePrefab);
+            return vertices[cass].gameObject;
         }
 
     }
