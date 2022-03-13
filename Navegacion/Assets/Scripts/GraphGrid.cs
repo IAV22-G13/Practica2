@@ -385,6 +385,11 @@ namespace UCM.IAV.Navegacion
             }
         }
 
+        public void changeMapStyle()
+        {
+            randomMap = !randomMap;
+        }
+
         public override Vertex GetNearestVertex(Vector3 position)
         {
             int col = (int)(position.x / cellSize);

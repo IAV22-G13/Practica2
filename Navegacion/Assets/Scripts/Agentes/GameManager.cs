@@ -2,20 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class GameManager : MonoBehaviour
+namespace UCM.IAV.Navegacion
 {
-    // Update is called once per frame
-    void Update()
+    public class GameManager : MonoBehaviour
     {
-        if (Input.GetKeyDown("r"))
+        static public GameManager instance;
+        public GraphGrid gP;
+        public bool suavizado = true;
+        // Update is called once per frame
+        public void Start()
         {
-            Application.LoadLevel(Application.loadedLevelName);
+            instance = this;
         }
-        if (Input.GetKeyDown("t"))
+
+        public void Update()
         {
+            if (Input.GetKeyDown("r"))
+            {
+                Application.LoadLevel(Application.loadedLevelName);
+            }
+            if (Input.GetKeyDown("s"))
+            {
+                suavizado = !suavizado;
+            }
+            if (Input.GetKeyDown("h"))
+            {
+               
+            }
+            if (Input.GetKeyDown("m"))
+            {
+                gP.changeMapStyle();
+                Application.LoadLevel(Application.loadedLevelName);
+            }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Application.Quit();
+
+        public bool getSuavizado()
+        {
+            return suavizado;
+        }
     }
 }

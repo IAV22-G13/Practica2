@@ -24,7 +24,8 @@ namespace UCM.IAV.Navegacion
             if (path != null && endOfPath == null)
             {
                 path = grafo.GetPathBFS(this.gameObject, endOfPath);
-                path = grafo.Smooth(path);
+                if (GameManager.instance.getSuavizado())
+                    path = grafo.Smooth(path);
                 DrawPath(material);
             }
         }
@@ -46,7 +47,8 @@ namespace UCM.IAV.Navegacion
                     endOfPath = grafo.randCass();
 
                 path = grafo.GetPathBFS(this.gameObject, endOfPath);
-                path = grafo.Smooth(path);
+                if (GameManager.instance.getSuavizado())
+                    path = grafo.Smooth(path);
                 DrawPath(material);
             }
 
@@ -70,7 +72,8 @@ namespace UCM.IAV.Navegacion
                         return new Direccion();
                     }
                     path = grafo.GetPathBFS(act.gameObject, grafo.randCass());
-                    path = grafo.Smooth(path);
+                    if (GameManager.instance.getSuavizado())
+                        path = grafo.Smooth(path);
                 }
                 else
                 {
