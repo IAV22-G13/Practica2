@@ -74,7 +74,7 @@ namespace UCM.IAV.Navegacion
         public GameObject vertexPrefab;
         protected List<Vertex> vertices;
         protected List<List<Vertex>> neighbors;
-        protected float[] costs;
+        public float[] costs;
         //protected Dictionary<int, int> instIdToId;
 
         //// this is for informed search like A*

@@ -54,7 +54,7 @@ namespace UCM.IAV.Navegacion
         int numCols;
         int numRows;
         GameObject[] vertexObjs;
-        bool[,] mapVertices;
+        public bool[,] mapVertices;
         location playerIniPos;
         Quaternion playerIniRot;
         int endCass;
@@ -64,7 +64,7 @@ namespace UCM.IAV.Navegacion
             return Math.Max(numRows, numCols) * y + x;
         }
 
-        private Vector2 IdToGrid(int id)
+        public Vector2 IdToGrid(int id)
         {
             Vector2 location = Vector2.zero;
             location.y = Mathf.Floor(id / numCols);
