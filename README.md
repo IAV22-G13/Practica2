@@ -175,6 +175,9 @@ encuentra entoces vuelve a su movimiento aleatorio.
 
 Cuando se activa o desactiva el suavizado, se realiza tanto para el minotauro como para el player.
 
+El minotauro además hace que su casilla se comporte como un obstaculo para el player, y las cuatro casillas colindantes al 
+minotauro cuentan como atravesar 8 casillas normales, por lo que el player evitará ese aumento de coste.
+
 -Laberinto:
 
 Existe la posibilidad de crear un mapa aleatorio con pasillos, que se genera de forma procedural dependiendo de 
@@ -228,3 +231,9 @@ utilizado el pseudocódigo del libro:
 Si no para hacer prubas con un mapa con salas puedes utilizar el mapa por defecto.
 
 Para cambiar entre mapa aleatorio y el predefinido utilizaremos la tecla m.
+
+En el caso de generar un mapa aleatorio, el player siempre se genera en la entrada, y el minotauro en una casilla aleatoria que no sea obstáculo. 
+
+Hemos hecho ajustes en la mayoria de los métodos de la plantilla a lo largo del desarrollo, para adaptarlos a lo que nos fuese necesario
+para la práctica. también hemos añadido otros métodos en estas plantillas para mejorar su funcionalidad, como el randCass, que devuelve una casilla
+aleatoria del graphgrid, entre otros.
