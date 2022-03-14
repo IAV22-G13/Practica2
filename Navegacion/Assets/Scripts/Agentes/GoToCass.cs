@@ -57,7 +57,7 @@ namespace UCM.IAV.Navegacion
         {
             if (endLab)
                 return new Direccion();
-            if (path == null)
+            if (path == null || path.Count == 0)
             {
                 path = grafo.GetPathAstar(grafo.GetNearestVertex(this.transform.position).gameObject, endOfPath, grafo.EuclidDist);
                 if (GameManager.instance.getSuavizado())
