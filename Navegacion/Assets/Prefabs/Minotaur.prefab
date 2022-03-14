@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1879744708374735148}
   - component: {fileID: 1879744708374735149}
   - component: {fileID: 1879744708374735122}
-  - component: {fileID: 1879744708374735150}
+  - component: {fileID: 5014034752832290766}
   - component: {fileID: 1192174995386465424}
   m_Layer: 6
   m_Name: Minotaur
@@ -191,7 +191,7 @@ MonoBehaviour:
   velocity: 20
   material: {fileID: 2100000, guid: 96866e3356417a147b69607a21f0b541, type: 2}
   materialOld: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
---- !u!114 &1879744708374735150
+--- !u!114 &5014034752832290766
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

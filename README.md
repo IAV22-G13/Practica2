@@ -242,3 +242,5 @@ Resumen de atajos de teclado:
 -Escape, cerrar el juego.
 -R, reiniciar escena.
 -K, cambiar el si se realiza el suavizado.
+
+Video: https://youtu.be/beF6yPxlU1I
