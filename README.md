@@ -154,11 +154,11 @@ generación del camino mediante A*
 -Movimiento del jugador: 
  
 Para el movimiento del jugador hemos utilizado el control jugador de la primera práctica modificando algunos
-detalles, y para el movimiento automático hasta la salida, hemos utilizado AStar, la heuristica utilizada es la Distancia Euclidea o Manhattan,
-se puede cambiar con la tecla H. Hasta que el jugador no llega a hasta una pequeña distancia del centro de la casilla
+detalles, y para el movimiento automático hasta la salida, hemos utilizado AStar, la heuristica utilizada es la Distancia Euclidea o Manhattan.
+Hasta que el jugador no llega a hasta una pequeña distancia del centro de la casilla
 no empieza a dirigirse a la siguiente, asi evitamos que choque en algunas esquinas.
 
-El hilo de Ariadna se crea desde el componente GoToCass, en el método DrawPath, con ayuda del componente de Unity LineRenderer.
+El hilo de Ariadna se crea desde el componente GoToCass, al pulsar la tecla espacio, en el método DrawPath, con ayuda del componente de Unity LineRenderer.
 Se introducen los puntos con LineRenderer.setPosition, y este los une con una linea que representa el hilo.
 Las casillas se colorean de morado (en blanco a penas se veían) en el mismo DrawPath cambiando el material del MeshRenderer.
 
@@ -230,10 +230,15 @@ utilizado el pseudocódigo del libro:
 
 Si no para hacer prubas con un mapa con salas puedes utilizar el mapa por defecto.
 
-Para cambiar entre mapa aleatorio y el predefinido utilizaremos la tecla m.
-
 En el caso de generar un mapa aleatorio, el player siempre se genera en la entrada, y el minotauro en una casilla aleatoria que no sea obstáculo. 
 
 Hemos hecho ajustes en la mayoria de los métodos de la plantilla a lo largo del desarrollo, para adaptarlos a lo que nos fuese necesario
 para la práctica. también hemos añadido otros métodos en estas plantillas para mejorar su funcionalidad, como el randCass, que devuelve una casilla
 aleatoria del graphgrid, entre otros.
+
+Resumen de atajos de teclado:
+
+-Espacio, hilo de Ariadna y mover player hacia salida.
+-Escape, cerrar el juego.
+-R, reiniciar escena.
+-K, cambiar el si se realiza el suavizado.

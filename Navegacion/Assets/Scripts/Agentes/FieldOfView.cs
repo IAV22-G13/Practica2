@@ -59,6 +59,7 @@ namespace UCM.IAV.Navegacion
 						agente.transform.rotation = Quaternion.LookRotation(dirToTarget, Vector3.up);
 						timer = 0;
 						lastDireccion = result;
+						this.gameObject.GetComponent<GoToCass>().enabled = false;
 					}
 					else if (timer < maxTime)
 					{
@@ -66,6 +67,7 @@ namespace UCM.IAV.Navegacion
 						//agente.transform.rotation = Quaternion.LookRotation(dirToTarget, Vector3.up);
 						return lastDireccion;
 					}
+					else this.gameObject.GetComponent<GoToCass>().enabled = true;
 				}
 				else if (timer < maxTime)
 				{
@@ -73,6 +75,7 @@ namespace UCM.IAV.Navegacion
 					//agente.transform.rotation = Quaternion.LookRotation(dirToTarget, Vector3.up);
 					return lastDireccion;
 				}
+				else this.gameObject.GetComponent<GoToCass>().enabled = true;
 			}
             else if (timer < maxTime)
             {
@@ -80,6 +83,7 @@ namespace UCM.IAV.Navegacion
 				//agente.transform.rotation = Quaternion.LookRotation(dirToTarget, Vector3.up);
 				return lastDireccion;
             }
+			else this.gameObject.GetComponent<GoToCass>().enabled = true;
 			return result;
 		}
 

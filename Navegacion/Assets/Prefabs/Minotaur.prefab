@@ -207,8 +207,8 @@ MonoBehaviour:
   prioridad: 2
   objetivo: {fileID: 0}
   viewRadius: 10
-  viewAngle: 59
-  speed: 1
+  viewAngle: 180
+  speed: 20
   raySize: 0.3
   targetMask:
     serializedVersion: 2

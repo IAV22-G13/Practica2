@@ -21,18 +21,9 @@ namespace UCM.IAV.Navegacion
             {
                 Application.LoadLevel(Application.loadedLevelName);
             }
-            if (Input.GetKeyDown("s"))
+            if (Input.GetKeyDown("k"))
             {
                 suavizado = !suavizado;
-            }
-            if (Input.GetKeyDown("h"))
-            {
-               
-            }
-            if (Input.GetKeyDown("m"))
-            {
-                gP.changeMapStyle();
-                Application.LoadLevel(Application.loadedLevelName);
             }
             if (Input.GetKeyDown(KeyCode.Escape))
             {

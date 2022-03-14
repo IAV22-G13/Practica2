@@ -326,7 +326,10 @@ namespace UCM.IAV.Navegacion
         {
             playerIniPos = new location(0, 0);
             if (!randomMap)
+            {
                 LoadMap(mapName);
+                playerIniPos = new location(40, 40);
+            }
             else
                 LoadRandMap();
             GameObject p = Instantiate(playerPrefab, new Vector3(playerIniPos.y * cellSize /*+ (cellSize / 2)*/, playerPrefab.transform.position.y, playerIniPos.x * cellSize /*+ (cellSize / 2)*/), playerIniRot);
