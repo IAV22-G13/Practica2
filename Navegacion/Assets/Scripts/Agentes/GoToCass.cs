@@ -16,6 +16,7 @@ namespace UCM.IAV.Navegacion
 
         private List<Vertex> path = null;
         private GameObject endOfPath = null;
+        bool endLab = false;
 
         private void Start()
         {
@@ -31,7 +32,9 @@ namespace UCM.IAV.Navegacion
             if (this.gameObject.GetComponent<ControlJugador>() != null && grafo.getEndCass() != null)
                 endOfPath = grafo.getEndCass();
             else
+            {
                 endOfPath = grafo.randCass();
+            }
 
             if (this.GetComponent<LineRenderer>() != null)
                 this.GetComponent<LineRenderer>().enabled = true;
@@ -52,10 +55,11 @@ namespace UCM.IAV.Navegacion
 
         public override Direccion GetDireccion()
         {
+            if (endLab)
+                return new Direccion();
             if (path == null)
             {
                 path = grafo.GetPathAstar(grafo.GetNearestVertex(this.transform.position).gameObject, endOfPath, grafo.EuclidDist);
-                Debug.Log(path.Count);
                 if (GameManager.instance.getSuavizado())
                     path = grafo.Smooth(path);
                 DrawPath(material);
@@ -78,6 +82,7 @@ namespace UCM.IAV.Navegacion
                     if (this.gameObject.GetComponent<ControlJugador>() != null)  //Final laberinto
                     {
                         path = null;
+                        endLab = true;
                         return new Direccion();
                     }
                     path = grafo.GetPathAstar(act.gameObject, grafo.randCass(), grafo.EuclidDist);
@@ -102,6 +107,7 @@ namespace UCM.IAV.Navegacion
                 this.GetComponent<LineRenderer>().positionCount = path.Count + 1;
             for (int i = 0; i < path.Count; i++)
             {
+                if (path[i] == null) continue;
                 if (material != null)
                     path[i].GetComponent<MeshRenderer>().material = m;
                 Vector3 pos = path[i].gameObject.transform.position;
