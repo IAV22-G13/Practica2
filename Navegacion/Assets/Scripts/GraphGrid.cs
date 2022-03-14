@@ -334,6 +334,7 @@ namespace UCM.IAV.Navegacion
             GameObject g = randCass();
             GameObject m = Instantiate(minotaurPrefab, new Vector3(g.transform.position.x, minotaurPrefab.transform.position.y, g.transform.position.z) , playerIniRot);
             m.GetComponent<GoToCass>().grafo = this;
+            m.GetComponent<GoToCass>().enabled = true;
             m.GetComponent<PoisonCass>().gP = this;
         }
 
@@ -386,77 +387,45 @@ namespace UCM.IAV.Navegacion
             randomMap = !randomMap;
         }
 
-        public override float[] GetNeighboursCosts(int vertId)
-        {
+        public override float[] GetNeighboursCosts(int vertId)
+        {
             Vector2[] pos = new Vector2[4];
             Vector2 p = IdToGrid(vertId);
-            pos[0] = new Vector2(p.x, p.y - 1);
-            pos[1] = new Vector2(p.x - 1, p.y);
-            pos[2] = new Vector2(p.x + 2, p.y);
+            pos[0] = new Vector2(p.x, p.y - 1);
+            pos[1] = new Vector2(p.x - 1, p.y);
+            pos[2] = new Vector2(p.x + 2, p.y);
             pos[3] = new Vector2(p.x, p.y + 1);
-
             int tam = neighbors[vertId].Count;
             float[] n = new float[tam];
-
-            for (int i = 0; i < tam; i++)
-            {
+            for (int i = 0; i < tam; i++)
+            {
                 int x = (int)pos[i].y;
                 int y = (int)pos[i].x;
                 if (x < 0 || y < 0 || x >= numRows || y >= numCols || !mapVertices[x, y])
                     continue;
-                n[i] = costs[GridToId(x, y)];
+                n[i] = costs[GridToId(x, y)];
             }
-
-            return n;
+            return n;
         }
 
         public override Vertex GetNearestVertex(Vector3 position)
         {
             int col = (int)Mathf.Round(position.x / cellSize);
             int row = (int)Mathf.Round(position.z / cellSize);
-            Vector2 p = new Vector2(col, row);
-            List<Vector2> explored = new List<Vector2>();
-            Queue<Vector2> queue = new Queue<Vector2>();
-            queue.Enqueue(p);
-            do
-            {
-                p = queue.Dequeue();
-                col = (int)p.x;
-                row = (int)p.y;
-                int id = GridToId(col, row);
-                if (mapVertices[row, col])
-                    return vertices[id];
-
-                if (!explored.Contains(p))
-                {
-                    explored.Add(p);
-                    int i, j;
-                    for (i = row - 1; i <= row + 1; i++)
-                    {
-                        for (j = col - 1; j <= col + 1; j++)
-                        {
-                            if (i < 0 || j < 0)
-                                continue;
-                            if (j >= numCols || i >= numRows)
-                                continue;
-                            if (i == row && j == col)
-                                continue;
-                            queue.Enqueue(new Vector2(j, i));
-                        }
-                    }
-                }
-            } while (queue.Count != 0);
-            return null;
+            int id = GridToId(col, row);
+            return vertices[id];
         }
 
         public GameObject randCass()
         {
             int cass = 0;
+            Vector2 pos;
             do
             {
                 cass = UnityEngine.Random.Range(0, vertices.Count - 1);
+                pos = IdToGrid(cass);
             }
-            while (vertices[cass].gameObject == obstaclePrefab);
+            while (!mapVertices[(int)pos.x, (int)pos.y]);
             return vertices[cass].gameObject;
         }
 

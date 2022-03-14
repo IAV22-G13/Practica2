@@ -267,7 +267,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!850595691 &739135557
 LightingSettings:
@@ -557,7 +557,7 @@ MonoBehaviour:
   cellSize: 1
   defaultCost: 1
   maximumCost: Infinity
-  randomMap: 1
+  randomMap: 0
   sizeRandom: 49
 --- !u!4 &1574568753
 Transform:
